@@ -17,23 +17,19 @@
   --paper: #ffffff;
   --bolt-wash: #eef0fd;
   --accent: #3e4bd0;
-  --primary: #6db4f0;
+  --primary: #3d8fd6;
   --primary-ink: #171a33;
-  --primary-shadow: rgba(50, 140, 210, .38);
+  --primary-shadow: rgba(61, 143, 214, .38);
   --friend: #e8b93a;
   --friend-ink: #2a2108;
   --friend-sub: #43350a;
-  --tint-follow: #f6d3e1;
-  --follow-ink: #2b1d26;
-  --follow-sub: #5e3a4e;
-  --follow-icon: #a3245f;
-  --tint-book: #d5dbfa;
-  --book-sub: #3f4568;
-  --book-icon: #2f3cb0;
-  --tint-review: #f3e3b0;
-  --review-ink: #2a2410;
-  --review-sub: #574a26;
-  --review-icon: #86620c;
+  --tint-follow: #ee9590;
+  --follow-icon: #8f1d1d;
+  --tint-book: #b0bdf3;
+  --book-icon: #26318f;
+  --tint-review: #a3d6b8;
+  --review-icon: #1f6b45;
+  --tint-sub: #2b2f4a;
   --field: #e9ebf6;
   --gold-hi: #e8b93a;
   --gold: #c9971b;
@@ -160,15 +156,13 @@ a { color: inherit; }
 }
 .btn-primary svg { width: 24px; height: 24px; }
 /* One soft tint per action, so stacked buttons read apart without heavy outlines. */
-.btn-follow { background: var(--tint-follow); color: var(--follow-ink); }
+.btn-follow { background: var(--tint-follow); }
 .btn-follow svg { color: var(--follow-icon); }
-.btn-follow .sub { color: var(--follow-sub); }
 .btn-book { background: var(--tint-book); }
 .btn-book svg { color: var(--book-icon); }
-.btn-book .sub { color: var(--book-sub); }
-.btn-review { background: var(--tint-review); color: var(--review-ink); }
+.btn-review { background: var(--tint-review); }
 .btn-review svg { color: var(--review-icon); }
-.btn-review .sub { color: var(--review-sub); }
+.btn-follow .sub, .btn-book .sub, .btn-review .sub { color: var(--tint-sub); }
 .btn-friend { background: var(--friend); color: var(--friend-ink); box-shadow: 0 8px 18px rgba(176, 128, 20, .28); }
 .btn-friend .sub { color: var(--friend-sub); }
 
@@ -326,7 +320,7 @@ a { color: inherit; }
 /* Sheet text (follow nudge, thank-you) */
 .sheet-kicker { margin: 0 0 4px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
 .sheet-text { margin: -6px 0 10px; font-size: 16px; color: var(--ink-2); }
-.sheet-perk { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: var(--tint-follow); font-size: 16px; }
+.sheet-perk { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: var(--bolt-wash); font-size: 16px; }
 .sheet-perk span { color: var(--gold); }
 .sheet-later {
   display: block; width: 100%; margin-top: 8px; padding: 10px; border: 0; background: none;
@@ -383,7 +377,7 @@ a { color: inherit; }
 .review-page .stars span { font-size: clamp(34px, calc(6 * var(--vh)), 44px); }
 .dm-preview {
   margin: 0 0 14px; padding: 12px 14px; border-radius: 14px 14px 14px 4px;
-  background: var(--tint-book); font-size: 15px; line-height: 1.35;
+  background: var(--field); font-size: 15px; line-height: 1.35;
 }
 
 /* Inner pages: a small way back to the card, and the review page's sign-off. */
