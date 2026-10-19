@@ -1,0 +1,349 @@
+/* 8kblends digital card. Brand kit pulled from the Canva mockups. */
+
+@font-face { font-family: "Oswald"; font-weight: 500; font-display: swap;
+  src: url("/assets/fonts/oswald-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Oswald"; font-weight: 700; font-display: swap;
+  src: url("/assets/fonts/oswald-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Mr Dafoe"; font-weight: 400; font-display: swap;
+  src: url("/assets/fonts/mr-dafoe-latin-400-normal.woff2") format("woff2"); }
+
+:root {
+  /* The card is a printed-brand look: always white paper, black ink. */
+  color-scheme: light;
+  --ink: #0b0b0b;
+  --ink-2: #33343d;
+  --paper: #ffffff;
+  --bolt: #7586ec;
+  --bolt-wash: #eef0fd;
+  --gold-hi: #f0cf62;
+  --radius: 16px;
+  --display: "Oswald", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+  --script: "Mr Dafoe", "Brush Script MT", "Segoe Script", cursive;
+  /* Everything below scales with the visible screen height (svh), so the
+     card always fits on one screen, from an iPhone SE up. */
+  --vh: 1vh;
+}
+@supports (height: 1svh) { :root { --vh: 1svh; } }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 16px/1.4 var(--display);
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+
+/* ---------- Card page: one screen, lightning ---------- */
+.theme-lightning { background: var(--bolt-wash) url("/assets/lightning.jpg") center / cover no-repeat; }
+.wrap {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(6px, calc(1.3 * var(--vh)), 14px);
+  width: 100%; max-width: 440px; min-height: calc(100 * var(--vh));
+  margin: 0 auto;
+  padding: calc(clamp(8px, calc(1.6 * var(--vh)), 18px) + env(safe-area-inset-top)) 16px
+           calc(clamp(8px, calc(1.4 * var(--vh)), 16px) + env(safe-area-inset-bottom));
+}
+.masthead { display: grid; justify-items: center; gap: 2px; }
+.logo { width: auto; max-width: min(94%, 380px); max-height: calc(21 * var(--vh)); }
+.byline {
+  margin: 0; text-align: center;
+  font-weight: 700; font-size: clamp(14px, calc(2.1 * var(--vh)), 18px); letter-spacing: .02em;
+}
+.panel {
+  padding: clamp(10px, calc(1.8 * var(--vh)), 18px) 16px clamp(12px, calc(2 * var(--vh)), 20px);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .95);
+  box-shadow: 0 12px 40px rgba(40, 50, 140, .22);
+}
+.hook {
+  margin: 0 0 clamp(8px, calc(1.4 * var(--vh)), 14px);
+  font: 400 clamp(24px, calc(4.2 * var(--vh)), 34px)/1.05 var(--script);
+  text-align: center;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px;
+}
+.fine { margin: 0; text-align: center; font-size: 12px; color: var(--ink-2); opacity: .8; }
+
+/* "Marcus sent you" line, shown when the card is opened from a friend's link. */
+.ref-banner {
+  margin: 0 0 clamp(6px, calc(1.2 * var(--vh)), 14px); padding: clamp(5px, calc(1 * var(--vh)), 9px) 12px;
+  border-radius: 14px; background: var(--ink); color: var(--gold-hi);
+  font-size: clamp(13px, calc(2.1 * var(--vh)), 16px); line-height: 1.2; text-align: center;
+}
+.ref-banner[hidden] { display: none; }
+/* On a friend's link the banner takes the headline's place, so the card still fits one screen. */
+.ref-banner:not([hidden]) + .hook { display: none; }
+
+/* Price strip. Free mode: prices crossed out next to a FREE stamp. */
+.prices {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px 12px;
+  margin: calc(-0.4 * var(--vh)) 0 clamp(8px, calc(1.3 * var(--vh)), 14px); padding: 0;
+  list-style: none; font-size: clamp(13px, calc(1.9 * var(--vh)), 15px); color: var(--ink-2);
+}
+.prices li { white-space: nowrap; }
+.prices s { text-decoration-thickness: 2px; text-decoration-color: #d0342c; }
+.prices b { color: var(--ink); }
+.free-badge {
+  padding: 2px 9px; border-radius: 999px; background: var(--ink); color: var(--gold-hi);
+  font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------- Buttons ---------- */
+.actions { display: grid; gap: clamp(6px, calc(1.1 * var(--vh)), 12px); }
+.btn {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; min-height: clamp(42px, calc(6.4 * var(--vh)), 58px); padding: 0 18px;
+  border: 2px solid var(--ink); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink);
+  font: 700 clamp(15px, calc(2.2 * var(--vh)), 18px)/1 var(--display);
+  letter-spacing: .05em; text-transform: uppercase; text-align: left;
+  text-decoration: none; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .08s ease;
+}
+.btn:active { transform: scale(.98); }
+.btn:focus-visible, .sheet-close:focus-visible { outline: 3px solid var(--bolt); outline-offset: 3px; }
+.btn svg { width: 22px; height: 22px; flex: none; }
+.btn .sub {
+  margin-left: auto;
+  font: 500 14px/1.1 var(--display); letter-spacing: .02em; text-transform: none;
+  color: var(--ink-2); text-align: right;
+}
+/* Labels stay on one line; only the small sub line may wrap on narrow phones. */
+.btn { white-space: nowrap; }
+.btn .sub { white-space: normal; }
+/* A tip that's been done gets a check mark. */
+.btn.done::after {
+  content: "✓"; display: grid; place-items: center; flex: none;
+  width: 24px; height: 24px; margin-left: 10px; border-radius: 50%;
+  background: #00a63e; color: #fff; font-size: 14px;
+}
+.btn.done::after { margin-left: auto; }
+/* Two-line button: label with the sub line under it (tip page). */
+.btn-tall { min-height: clamp(54px, calc(8 * var(--vh)), 68px); }
+.stack { display: grid; gap: 5px; }
+.btn-tall .sub { margin-left: 0; }
+.btn-primary {
+  min-height: clamp(48px, calc(7.4 * var(--vh)), 66px);
+  font-size: clamp(17px, calc(2.5 * var(--vh)), 21px);
+  background: var(--ink); color: var(--gold-hi); border-color: var(--ink);
+  box-shadow: 0 8px 22px rgba(11, 11, 11, .28), inset 0 0 0 2px rgba(240, 207, 98, .35);
+}
+
+.contact-line {
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 14px;
+  margin: clamp(8px, calc(1.4 * var(--vh)), 16px) 0 0;
+  font-size: clamp(14px, calc(2 * var(--vh)), 16px);
+}
+.contact-line a { text-underline-offset: 3px; }
+
+/* ---------- Bottom sheets (follow nudge, thank-you) ---------- */
+.sheet {
+  position: fixed; inset: auto 0 0 0;
+  width: min(100%, 440px); max-width: none; margin: 0 auto;
+  padding: 22px 20px calc(24px + env(safe-area-inset-bottom));
+  border: 0; border-radius: 24px 24px 0 0;
+  background: var(--paper); color: var(--ink);
+  box-shadow: 0 -10px 40px rgba(11, 11, 11, .25);
+}
+.sheet::backdrop { background: rgba(11, 11, 11, .45); }
+.sheet[open] { animation: sheet-up .22s ease-out; }
+@keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } }
+.sheet-close-form { position: absolute; top: 12px; right: 12px; margin: 0; }
+.sheet-close {
+  display: grid; place-items: center; width: 40px; height: 40px;
+  border: 0; border-radius: 50%; background: #f0f0f3; color: var(--ink); cursor: pointer;
+}
+.sheet-close svg { width: 18px; height: 18px; }
+.sheet-title { margin: 0 0 14px; font: 700 20px/1 var(--display); letter-spacing: .05em; text-transform: uppercase; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 10;
+  transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+  padding: 12px 18px; border-radius: 999px;
+  background: var(--ink); color: var(--paper);
+  font: 500 15px/1.2 var(--display); white-space: nowrap;
+  transition: opacity .2s, transform .2s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- QR screen (slide 4, shown on Ty's phone) ---------- */
+.qr-page { background: var(--bolt-wash) url("/assets/lightning.jpg") center / cover no-repeat; }
+.qr-stage {
+  display: grid;
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+  grid-template-areas: "tabs" "hook" "qr" "cta" "scene";
+  justify-items: center;
+  height: calc(100 * var(--vh));
+  padding: calc(12px + env(safe-area-inset-top)) 16px 0;
+  overflow: hidden;
+}
+/* Contact | Pay toggle: Ty flips to Pay at checkout. */
+.qr-tabs {
+  grid-area: tabs; display: inline-flex; padding: 3px;
+  border: 2px solid var(--ink); border-radius: 999px; background: rgba(255, 255, 255, .9);
+}
+.qr-tabs button {
+  min-width: 92px; min-height: 36px; padding: 0 16px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--ink);
+  font: 700 15px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+}
+.qr-tabs button[aria-selected="true"] { background: var(--ink); color: var(--gold-hi); }
+.qr-tabs button:focus-visible { outline: 3px solid var(--bolt); outline-offset: 2px; }
+[data-mode="contact"] [data-for]:not([data-for="contact"]),
+[data-mode]:not([data-mode="contact"]) [data-for="contact"] { display: none; }
+
+.qr-hook {
+  grid-area: hook; margin: calc(1.4 * var(--vh)) 0 0;
+  font: 400 clamp(28px, 8.6vw, 44px)/1.05 var(--script); text-align: center;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 7px;
+}
+.qr-box {
+  grid-area: qr; margin-top: calc(1.6 * var(--vh));
+  width: var(--qr-size, min(84vw, calc(42 * var(--vh)), 440px)); aspect-ratio: 1;
+  background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 14px 40px rgba(40, 50, 140, .25);
+}
+.qr-box svg { display: block; width: 100%; height: 100%; }
+.qr-cta {
+  grid-area: cta; margin: calc(1.8 * var(--vh)) 0 0; text-align: center;
+  font: 700 clamp(16px, 5vw, 22px)/1.1 var(--display); letter-spacing: .05em; text-transform: uppercase;
+}
+/* Bottom "barbershop" scene: pole on the wall (left, raised), the customer
+   in the chair (center) and Ty (right). */
+.qr-scene {
+  grid-area: scene; align-self: stretch; justify-self: stretch;
+  display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: minmax(0, 1fr);
+  align-items: end; min-height: 0;
+}
+.qr-scene img { width: auto; height: auto; max-height: 100%; min-height: 0; filter: drop-shadow(0 8px 10px rgba(30, 40, 120, .25)); }
+.qr-scene .qr-pole { grid-column: 1; align-self: center; height: min(16vh, 70%); max-height: 150px; margin-bottom: 8%; }
+.qr-scene .qr-chair { grid-column: 2; justify-self: center; max-width: 100%; }
+.qr-scene .qr-avatar { grid-column: 3; max-width: 34vw; }
+/* Variant B: the same customer, facing the other way. */
+[data-variant="b"] .qr-chair { transform: scaleX(-1); }
+.qr-back {
+  position: fixed; top: calc(8px + env(safe-area-inset-top)); right: 14px;
+  font-size: 13px; color: var(--ink-2); opacity: .65;
+}
+
+/* Phone turned sideways: pole and customer on the left, QR center, Ty right. */
+@media (orientation: landscape) and (max-height: 640px) {
+  .qr-stage {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  }
+  .qr-tabs { order: 0; }
+  .qr-tabs button { min-height: 28px; min-width: 80px; font-size: 13px; }
+  .qr-box { order: 1; margin: 6px 0 0; width: var(--qr-size, min(66vh, 38vw)); }
+  .qr-hook { order: 2; margin: 6px 0 0; font-size: 26px; }
+  .qr-cta { order: 3; margin-top: 4px; font-size: 14px; }
+  .qr-scene { position: absolute; inset: 0; display: block; pointer-events: none; }
+  .qr-scene img { position: absolute; max-height: none; max-width: none; }
+  .qr-scene .qr-pole { left: max(28px, env(safe-area-inset-left)); top: 40%; height: 34vh; margin: 0; transform: translateY(-50%); }
+  .qr-scene .qr-chair { left: max(14%, env(safe-area-inset-left)); bottom: 0; height: 52vh; }
+  .qr-scene .qr-avatar { right: max(20px, env(safe-area-inset-right)); bottom: 0; height: 90vh; }
+  .qr-back { display: none; }
+}
+
+/* ---------- Pay page ---------- */
+.logo-sm { max-height: calc(13 * var(--vh)); }
+.pay-page .hook { margin-bottom: clamp(6px, calc(1.2 * var(--vh)), 12px); }
+.pay-form { display: grid; gap: clamp(6px, calc(1.2 * var(--vh)), 12px); }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.chips legend {
+  width: 100%; margin: 0 0 6px; padding: 0; text-align: center;
+  font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2);
+}
+.chip { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span {
+  display: inline-flex; align-items: center; min-height: clamp(36px, calc(5.4 * var(--vh)), 44px); padding: 0 11px;
+  border: 2px solid var(--ink); border-radius: 999px; background: var(--paper);
+  font-weight: 700; font-size: clamp(14px, calc(2.1 * var(--vh)), 17px); letter-spacing: .01em; white-space: nowrap;
+}
+.chip input:checked + span { background: var(--ink); color: var(--gold-hi); }
+.chip input:focus-visible + span { outline: 3px solid var(--bolt); outline-offset: 2px; }
+.total {
+  margin: clamp(8px, calc(1.6 * var(--vh)), 16px) 0; text-align: center;
+  font-size: clamp(18px, calc(2.6 * var(--vh)), 22px); text-transform: uppercase; letter-spacing: .05em;
+}
+.total b { font-size: 1.6em; letter-spacing: 0; }
+.total-detail { font-size: 14px; text-transform: none; letter-spacing: .01em; color: var(--ink-2); }
+.btn-pay { min-height: clamp(50px, calc(7.4 * var(--vh)), 64px); font-size: clamp(17px, calc(2.5 * var(--vh)), 20px); }
+.app-badge {
+  display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 9px;
+  color: #fff; font-weight: 700; font-size: 18px;
+}
+.app-badge.cash { background: #00c244; }
+.app-badge.apple { background: var(--ink); }
+.app-badge svg { width: 18px; height: 18px; }
+
+/* Sheet text (follow nudge, thank-you) */
+.sheet-kicker { margin: 0 0 4px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.sheet-text { margin: -6px 0 10px; font-size: 16px; color: var(--ink-2); }
+.sheet-perk { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: var(--bolt-wash); font-size: 16px; }
+.sheet-perk span { color: var(--gold); }
+.sheet-later {
+  display: block; width: 100%; margin-top: 8px; padding: 10px; border: 0; background: none;
+  font: 500 15px/1 var(--display); color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+
+/* ---------- Tip page (free mode) ---------- */
+.tip-page .hook { margin-bottom: clamp(6px, calc(1 * var(--vh)), 10px); }
+.legend {
+  margin: 0 0 8px; text-align: center;
+  font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2);
+}
+
+/* Sheet forms: send a friend, review */
+.sheet-form { display: grid; gap: 12px; margin: 0 0 4px; }
+.field { display: grid; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.field input {
+  width: 100%; min-height: 48px; padding: 0 14px;
+  border: 2px solid var(--ink); border-radius: 12px; background: var(--paper); color: var(--ink);
+  font: 500 17px/1 var(--display);
+}
+.field input:focus-visible { outline: 3px solid var(--bolt); outline-offset: 2px; }
+.stars { display: flex; justify-content: center; gap: 4px; margin: 0; padding: 0; border: 0; flex-direction: row-reverse; }
+.stars label { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.stars input { position: absolute; opacity: 0; pointer-events: none; }
+.stars span { display: block; padding: 0 4px; font-size: 40px; line-height: 1; color: #d7d8e0; transition: color .1s; }
+/* Markup is 5..1 and row-reverse shows it 1..5, so "~" reaches the lower stars to its left. */
+.stars input:checked + span, .stars label:has(input:checked) ~ label span { color: var(--gold-hi); text-shadow: 0 1px 0 #b8941f; }
+.stars input:focus-visible + span { outline: 3px solid var(--bolt); outline-offset: 2px; border-radius: 6px; }
+[data-step="rate"] [data-step-panel="post"], [data-step="post"] [data-step-panel="rate"] { display: none; }
+.btn-friend { margin-top: 10px; }
+/* Referral toggle on the pay page: a lighter, dashed chip under the tips. */
+.chip-ref span {
+  min-height: clamp(30px, calc(4.6 * var(--vh)), 40px); border-style: dashed;
+  font-size: clamp(13px, calc(2 * var(--vh)), 16px);
+}
+.chip-ref input:checked + span { border-style: solid; }
+
+/* ---------- Forms: review and booking (live mode) ---------- */
+.review-form, .book-form { display: grid; gap: clamp(8px, calc(1.4 * var(--vh)), 12px); margin: 0; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.field-row .field input { min-width: 0; }
+.review-page .field input, .book-page .field input { min-height: clamp(40px, calc(6 * var(--vh)), 48px); }
+.field-inline { grid-template-columns: auto 1fr; align-items: center; gap: 10px; }
+.check { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--ink-2); cursor: pointer; }
+.check input { width: 22px; height: 22px; accent-color: var(--ink); flex: none; }
+/* Honeypot: hidden from people, filled in by spam bots. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.book-form .chips { gap: 6px; }
+.book-form .chips legend { margin-bottom: 4px; }
+.book-page .hook, .review-page .hook { margin-bottom: clamp(6px, calc(1 * var(--vh)), 10px); }
+.review-page .stars span { font-size: clamp(34px, calc(6 * var(--vh)), 44px); }
+.dm-preview {
+  margin: 0 0 14px; padding: 12px 14px; border-radius: 14px 14px 14px 4px;
+  background: var(--bolt-wash); font-size: 15px; line-height: 1.35;
+}

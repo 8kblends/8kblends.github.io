@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0b">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Looking for your next Barber? Save Ty's contact in one tap, follow @8kblends and book a cut. The Bay Area, California.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="8kblends">
+<meta property="og:url" content="https://8kblends.github.io/">
+<meta property="og:title" content="Ty The Barber · @8kblends">
+<meta property="og:description" content="Looking for your next Barber? Save my contact in one tap.">
+<meta property="og:image" content="https://8kblends.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The 8kblends drip logo with a cartoon of Ty holding gold clippers">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/oswald-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/mr-dafoe-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css?v=ba45170c94">
+
+
+<title>Rate your cut · 8kblends</title>
+<link rel="canonical" href="https://8kblends.github.io/review/">
+<link rel="manifest" href="/manifest.webmanifest">
+</head>
+<body class="theme-lightning review-page">
+<div class="wrap">
+  <header class="masthead">
+    <img class="logo logo-sm" src="/assets/logo.webp" width="994" height="599" alt="8kblends, Crafted with Detail">
+    <h1 class="byline">Tyler Campbell <span aria-hidden="true">·</span> Ty The Barber</h1>
+  </header>
+
+  <main class="panel">
+    <h2 class="hook">How was your cut?</h2>
+<form class="sheet-form review-form" data-review-form>
+  <fieldset class="stars">
+    <legend class="visually-hidden">Stars</legend>
+    <label><input type="radio" name="stars" value="5" required><span aria-label="5 stars">★</span></label>
+    <label><input type="radio" name="stars" value="4"><span aria-label="4 stars">★</span></label>
+    <label><input type="radio" name="stars" value="3"><span aria-label="3 stars">★</span></label>
+    <label><input type="radio" name="stars" value="2"><span aria-label="2 stars">★</span></label>
+    <label><input type="radio" name="stars" value="1"><span aria-label="1 star">★</span></label>
+  </fieldset>
+  <div class="field-row">
+    <label class="field"><span>First name</span><input name="first" autocomplete="given-name" maxlength="30" required></label>
+    <label class="field"><span>Last name</span><input name="last" autocomplete="family-name" maxlength="30" required></label>
+  </div>
+  <label class="field"><span>What stood out? (optional)</span><input name="comment" maxlength="300" placeholder="Clean fade, good vibes…"></label>
+  <label class="check"><input type="checkbox" name="ok_to_post" value="yes"><span>OK to post my before/after</span></label>
+  <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button class="btn btn-primary" type="submit">Send review</button>
+</form>
+
+    <p class="contact-line"><span>Goes straight to Ty</span> <a href="/">My card</a></p>
+  </main>
+
+  <p class="fine">© 8kblends · Ty The Barber</p>
+</div>
+
+<dialog class="sheet" id="review-thanks" aria-labelledby="review-thanks-title">
+  <form method="dialog" class="sheet-close-form">
+    <button class="sheet-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </form>
+  <p class="sheet-kicker">Thank you!</p>
+  <h2 class="sheet-title" id="review-thanks-title">Now post your cut</h2>
+  <p class="sheet-perk"><span aria-hidden="true">★</span> Tag @8kblends in your story and I'll repost you.</p>
+  <a class="btn btn-primary" href="https://www.instagram.com/8kblends/" data-copy-tag="@8kblends" data-count="review-post">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>
+    Copy @8kblends &amp; open IG
+  </a>
+  <button class="btn btn-tall btn-friend" type="button" data-open-sheet="friend-sheet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 13.8c1.8.9 3 2.9 3 5.2"/></svg>
+    <span class="stack"><span>Send a friend</span><span class="sub">Share my card</span></span>
+  </button>
+  <form method="dialog"><button class="sheet-later">Done</button></form>
+</dialog>
+<dialog class="sheet" id="friend-sheet" aria-labelledby="friend-title">
+  <form method="dialog" class="sheet-close-form">
+    <button class="sheet-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </form>
+  <p class="sheet-kicker">Send a friend</p>
+  <h2 class="sheet-title" id="friend-title">Send my card to a friend</h2>
+  <form class="sheet-form" data-friend-form>
+    <label class="field">
+      <span>Your first name, so I know who sent them</span>
+      <input name="name" autocomplete="given-name" maxlength="24" required placeholder="First name">
+    </label>
+    <button class="btn btn-primary" type="submit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+      Send my link
+    </button>
+  </form>
+  <form method="dialog"><button class="sheet-later">Maybe later</button></form>
+</dialog>
+
+<script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "phone": "+19254811969", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "", "share_text": "Get a fresh cut from Ty The Barber 💈 Mention me when you book:", "banner": "{name} sent you! Mention {name} when you book."}</script>
+<script src="/assets/card.js?v=ba45170c94" defer></script>
+<script src="/assets/friend.js?v=ba45170c94" defer></script>
+<script src="/assets/review.js?v=ba45170c94" defer></script>
+</body>
+</html>
