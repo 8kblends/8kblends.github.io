@@ -2,20 +2,39 @@
 
 @font-face { font-family: "Oswald"; font-weight: 500; font-display: swap;
   src: url("/assets/fonts/oswald-latin-500-normal.woff2") format("woff2"); }
-@font-face { font-family: "Oswald"; font-weight: 700; font-display: swap;
-  src: url("/assets/fonts/oswald-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Oswald"; font-weight: 600; font-display: swap;
+  src: url("/assets/fonts/oswald-latin-600-normal.woff2") format("woff2"); }
 @font-face { font-family: "Mr Dafoe"; font-weight: 400; font-display: swap;
   src: url("/assets/fonts/mr-dafoe-latin-400-normal.woff2") format("woff2"); }
 
 :root {
-  /* The card is a printed-brand look: always white paper, black ink. */
+  /* The card is a printed-brand look: always white paper, navy ink.
+     Buttons are soft tints, one per action; only the main button is solid. */
   color-scheme: light;
-  --ink: #0b0b0b;
-  --ink-2: #33343d;
+  --ink: #171a33;
+  --ink-2: #4a4f6e;
   --paper: #ffffff;
-  --bolt: #7586ec;
   --bolt-wash: #eef0fd;
-  --gold-hi: #f0cf62;
+  --accent: #3e4bd0;
+  --accent-ink: #ffffff;
+  --accent-shadow: rgba(52, 64, 190, .3);
+  --friend: #e8b93a;
+  --friend-ink: #2a2108;
+  --friend-sub: #43350a;
+  --tint-follow: #f6d3e1;
+  --follow-ink: #2b1d26;
+  --follow-sub: #5e3a4e;
+  --follow-icon: #a3245f;
+  --tint-book: #d5dbfa;
+  --book-sub: #3f4568;
+  --book-icon: #2f3cb0;
+  --tint-review: #f3e3b0;
+  --review-ink: #2a2410;
+  --review-sub: #574a26;
+  --review-icon: #86620c;
+  --field: #e9ebf6;
+  --gold-hi: #e8b93a;
+  --gold: #c9971b;
   --radius: 16px;
   --display: "Oswald", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
   --script: "Mr Dafoe", "Brush Script MT", "Segoe Script", cursive;
@@ -50,7 +69,7 @@ a { color: inherit; }
 .logo { width: auto; max-width: min(94%, 380px); max-height: calc(21 * var(--vh)); }
 .byline {
   margin: 0; text-align: center;
-  font-weight: 700; font-size: clamp(14px, calc(2.1 * var(--vh)), 18px); letter-spacing: .02em;
+  font-weight: 600; font-size: clamp(14px, calc(2.1 * var(--vh)), 18px); letter-spacing: .02em;
 }
 .panel {
   padding: clamp(10px, calc(1.8 * var(--vh)), 18px) 16px clamp(12px, calc(2 * var(--vh)), 20px);
@@ -69,7 +88,7 @@ a { color: inherit; }
 /* "Marcus sent you" line, shown when the card is opened from a friend's link. */
 .ref-banner {
   margin: 0 0 clamp(6px, calc(1.2 * var(--vh)), 14px); padding: clamp(5px, calc(1 * var(--vh)), 9px) 12px;
-  border-radius: 14px; background: var(--ink); color: var(--gold-hi);
+  border-radius: 14px; background: var(--friend); color: var(--friend-ink);
   font-size: clamp(13px, calc(2.1 * var(--vh)), 16px); line-height: 1.2; text-align: center;
 }
 .ref-banner[hidden] { display: none; }
@@ -86,8 +105,8 @@ a { color: inherit; }
 .prices s { text-decoration-thickness: 2px; text-decoration-color: #d0342c; }
 .prices b { color: var(--ink); }
 .free-badge {
-  padding: 2px 9px; border-radius: 999px; background: var(--ink); color: var(--gold-hi);
-  font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 9px; border-radius: 999px; background: var(--accent); color: var(--accent-ink);
+  font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
   transform: rotate(-4deg);
 }
 .visually-hidden {
@@ -100,16 +119,16 @@ a { color: inherit; }
 .btn {
   display: flex; align-items: center; gap: 14px;
   width: 100%; min-height: clamp(42px, calc(6.4 * var(--vh)), 58px); padding: 0 18px;
-  border: 2px solid var(--ink); border-radius: var(--radius);
-  background: var(--paper); color: var(--ink);
-  font: 700 clamp(15px, calc(2.2 * var(--vh)), 18px)/1 var(--display);
+  border: 0; border-radius: var(--radius);
+  background: var(--field); color: var(--ink);
+  font: 600 clamp(15px, calc(2.2 * var(--vh)), 18px)/1 var(--display);
   letter-spacing: .05em; text-transform: uppercase; text-align: left;
   text-decoration: none; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: transform .08s ease;
 }
 .btn:active { transform: scale(.98); }
-.btn:focus-visible, .sheet-close:focus-visible { outline: 3px solid var(--bolt); outline-offset: 3px; }
+.btn:focus-visible, .sheet-close:focus-visible, .back-chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .btn svg { width: 22px; height: 22px; flex: none; }
 .btn .sub {
   margin-left: auto;
@@ -133,9 +152,21 @@ a { color: inherit; }
 .btn-primary {
   min-height: clamp(48px, calc(7.4 * var(--vh)), 66px);
   font-size: clamp(17px, calc(2.5 * var(--vh)), 21px);
-  background: var(--ink); color: var(--gold-hi); border-color: var(--ink);
-  box-shadow: 0 8px 22px rgba(11, 11, 11, .28), inset 0 0 0 2px rgba(240, 207, 98, .35);
+  background: var(--accent); color: var(--accent-ink);
+  box-shadow: 0 10px 24px var(--accent-shadow);
 }
+/* One soft tint per action, so stacked buttons read apart without heavy outlines. */
+.btn-follow { background: var(--tint-follow); color: var(--follow-ink); }
+.btn-follow svg { color: var(--follow-icon); }
+.btn-follow .sub { color: var(--follow-sub); }
+.btn-book { background: var(--tint-book); }
+.btn-book svg { color: var(--book-icon); }
+.btn-book .sub { color: var(--book-sub); }
+.btn-review { background: var(--tint-review); color: var(--review-ink); }
+.btn-review svg { color: var(--review-icon); }
+.btn-review .sub { color: var(--review-sub); }
+.btn-friend { background: var(--friend); color: var(--friend-ink); box-shadow: 0 8px 18px rgba(176, 128, 20, .28); }
+.btn-friend .sub { color: var(--friend-sub); }
 
 .contact-line {
   display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 14px;
@@ -159,10 +190,10 @@ a { color: inherit; }
 .sheet-close-form { position: absolute; top: 12px; right: 12px; margin: 0; }
 .sheet-close {
   display: grid; place-items: center; width: 40px; height: 40px;
-  border: 0; border-radius: 50%; background: #f0f0f3; color: var(--ink); cursor: pointer;
+  border: 0; border-radius: 50%; background: var(--field); color: var(--ink); cursor: pointer;
 }
 .sheet-close svg { width: 18px; height: 18px; }
-.sheet-title { margin: 0 0 14px; font: 700 20px/1 var(--display); letter-spacing: .05em; text-transform: uppercase; }
+.sheet-title { margin: 0 0 14px; font: 600 21px/1 var(--display); letter-spacing: .05em; text-transform: uppercase; }
 
 .toast {
   position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 10;
@@ -188,15 +219,16 @@ a { color: inherit; }
 /* Contact | Pay toggle: Ty flips to Pay at checkout. */
 .qr-tabs {
   grid-area: tabs; display: inline-flex; padding: 3px;
-  border: 2px solid var(--ink); border-radius: 999px; background: rgba(255, 255, 255, .9);
+  border-radius: 999px; background: rgba(255, 255, 255, .92);
+  box-shadow: 0 4px 14px rgba(30, 40, 110, .14);
 }
 .qr-tabs button {
   min-width: 92px; min-height: 36px; padding: 0 16px;
   border: 0; border-radius: 999px; background: transparent; color: var(--ink);
-  font: 700 15px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  font: 600 15px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
 }
-.qr-tabs button[aria-selected="true"] { background: var(--ink); color: var(--gold-hi); }
-.qr-tabs button:focus-visible { outline: 3px solid var(--bolt); outline-offset: 2px; }
+.qr-tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+.qr-tabs button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 [data-mode="contact"] [data-for]:not([data-for="contact"]),
 [data-mode]:not([data-mode="contact"]) [data-for="contact"] { display: none; }
 
@@ -214,7 +246,7 @@ a { color: inherit; }
 .qr-box svg { display: block; width: 100%; height: 100%; }
 .qr-cta {
   grid-area: cta; margin: calc(1.8 * var(--vh)) 0 0; text-align: center;
-  font: 700 clamp(16px, 5vw, 22px)/1.1 var(--display); letter-spacing: .05em; text-transform: uppercase;
+  font: 600 clamp(16px, 5vw, 22px)/1.1 var(--display); letter-spacing: .05em; text-transform: uppercase;
 }
 /* Bottom "barbershop" scene: pole on the wall (left, raised), the customer
    in the chair (center) and Ty (right). */
@@ -267,11 +299,11 @@ a { color: inherit; }
 .chip input { position: absolute; opacity: 0; pointer-events: none; }
 .chip span {
   display: inline-flex; align-items: center; min-height: clamp(36px, calc(5.4 * var(--vh)), 44px); padding: 0 11px;
-  border: 2px solid var(--ink); border-radius: 999px; background: var(--paper);
-  font-weight: 700; font-size: clamp(14px, calc(2.1 * var(--vh)), 17px); letter-spacing: .01em; white-space: nowrap;
+  border-radius: 999px; background: var(--field);
+  font-weight: 600; font-size: clamp(14px, calc(2.1 * var(--vh)), 17px); letter-spacing: .01em; white-space: nowrap;
 }
-.chip input:checked + span { background: var(--ink); color: var(--gold-hi); }
-.chip input:focus-visible + span { outline: 3px solid var(--bolt); outline-offset: 2px; }
+.chip input:checked + span { background: var(--accent); color: var(--accent-ink); }
+.chip input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
 .total {
   margin: clamp(8px, calc(1.6 * var(--vh)), 16px) 0; text-align: center;
   font-size: clamp(18px, calc(2.6 * var(--vh)), 22px); text-transform: uppercase; letter-spacing: .05em;
@@ -281,7 +313,7 @@ a { color: inherit; }
 .btn-pay { min-height: clamp(50px, calc(7.4 * var(--vh)), 64px); font-size: clamp(17px, calc(2.5 * var(--vh)), 20px); }
 .app-badge {
   display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 9px;
-  color: #fff; font-weight: 700; font-size: 18px;
+  color: #fff; font-weight: 600; font-size: 18px;
 }
 .app-badge.cash { background: #00c244; }
 .app-badge.apple { background: var(--ink); }
@@ -290,7 +322,7 @@ a { color: inherit; }
 /* Sheet text (follow nudge, thank-you) */
 .sheet-kicker { margin: 0 0 4px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
 .sheet-text { margin: -6px 0 10px; font-size: 16px; color: var(--ink-2); }
-.sheet-perk { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: var(--bolt-wash); font-size: 16px; }
+.sheet-perk { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: var(--tint-follow); font-size: 16px; }
 .sheet-perk span { color: var(--gold); }
 .sheet-later {
   display: block; width: 100%; margin-top: 8px; padding: 10px; border: 0; background: none;
@@ -309,25 +341,27 @@ a { color: inherit; }
 .field { display: grid; gap: 6px; font-size: 14px; color: var(--ink-2); }
 .field input {
   width: 100%; min-height: 48px; padding: 0 14px;
-  border: 2px solid var(--ink); border-radius: 12px; background: var(--paper); color: var(--ink);
+  border: 0; border-radius: 12px; background: var(--field); color: var(--ink);
   font: 500 17px/1 var(--display);
 }
-.field input:focus-visible { outline: 3px solid var(--bolt); outline-offset: 2px; }
+.field input::placeholder { color: #6b7090; }
+.field input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .stars { display: flex; justify-content: center; gap: 4px; margin: 0; padding: 0; border: 0; flex-direction: row-reverse; }
 .stars label { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .stars input { position: absolute; opacity: 0; pointer-events: none; }
 .stars span { display: block; padding: 0 4px; font-size: 40px; line-height: 1; color: #d7d8e0; transition: color .1s; }
 /* Markup is 5..1 and row-reverse shows it 1..5, so "~" reaches the lower stars to its left. */
 .stars input:checked + span, .stars label:has(input:checked) ~ label span { color: var(--gold-hi); text-shadow: 0 1px 0 #b8941f; }
-.stars input:focus-visible + span { outline: 3px solid var(--bolt); outline-offset: 2px; border-radius: 6px; }
+.stars input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 [data-step="rate"] [data-step-panel="post"], [data-step="post"] [data-step-panel="rate"] { display: none; }
-.btn-friend { margin-top: 10px; }
+.sheet .btn-friend { margin-top: 10px; }
 /* Referral toggle on the pay page: a lighter, dashed chip under the tips. */
 .chip-ref span {
-  min-height: clamp(30px, calc(4.6 * var(--vh)), 40px); border-style: dashed;
+  min-height: clamp(30px, calc(4.6 * var(--vh)), 40px);
+  border: 1.5px dashed var(--ink-2); background: transparent;
   font-size: clamp(13px, calc(2 * var(--vh)), 16px);
 }
-.chip-ref input:checked + span { border-style: solid; }
+.chip-ref input:checked + span { border-style: solid; border-color: var(--accent); }
 
 /* ---------- Forms: review and booking (live mode) ---------- */
 .review-form, .book-form { display: grid; gap: clamp(8px, calc(1.4 * var(--vh)), 12px); margin: 0; }
@@ -336,7 +370,7 @@ a { color: inherit; }
 .review-page .field input, .book-page .field input { min-height: clamp(40px, calc(6 * var(--vh)), 48px); }
 .field-inline { grid-template-columns: auto 1fr; align-items: center; gap: 10px; }
 .check { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--ink-2); cursor: pointer; }
-.check input { width: 22px; height: 22px; accent-color: var(--ink); flex: none; }
+.check input { width: 22px; height: 22px; accent-color: var(--accent); flex: none; }
 /* Honeypot: hidden from people, filled in by spam bots. */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .book-form .chips { gap: 6px; }
@@ -345,5 +379,20 @@ a { color: inherit; }
 .review-page .stars span { font-size: clamp(34px, calc(6 * var(--vh)), 44px); }
 .dm-preview {
   margin: 0 0 14px; padding: 12px 14px; border-radius: 14px 14px 14px 4px;
-  background: var(--bolt-wash); font-size: 15px; line-height: 1.35;
+  background: var(--tint-book); font-size: 15px; line-height: 1.35;
+}
+
+/* Inner pages: a small way back to the card, and the review page's sign-off. */
+.back-chip {
+  position: absolute; z-index: 1;
+  top: calc(12px + env(safe-area-inset-top)); left: max(16px, env(safe-area-inset-left));
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px 0 10px;
+  border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--ink);
+  font: 600 14px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
+  box-shadow: 0 4px 12px rgba(30, 40, 110, .12);
+}
+.back-chip svg { width: 16px; height: 16px; color: var(--accent); }
+.signoff {
+  margin: clamp(6px, calc(1 * var(--vh)), 10px) 0 0; text-align: center;
+  font: 400 clamp(22px, calc(3.4 * var(--vh)), 28px)/1 var(--script); color: var(--accent);
 }
