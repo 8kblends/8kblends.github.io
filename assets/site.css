@@ -9,8 +9,9 @@
 
 :root {
   /* The card is a printed-brand look: always white paper, navy ink.
-     Buttons are soft tints, one per action, all with dark text; the main
-     button is azure and a size up. Indigo is kept for small accents. */
+     Two colored buttons only: the main one (blue, a size up) and Send a
+     friend (gold). The rest share one soft grey; their icons carry the color.
+     All text is dark. Indigo is kept for small accents. */
   color-scheme: light;
   --ink: #171a33;
   --ink-2: #4a4f6e;
@@ -23,13 +24,15 @@
   --friend: #e8b93a;
   --friend-ink: #2a2108;
   --friend-sub: #43350a;
-  --tint-follow: #ee9590;
-  --follow-icon: #8f1d1d;
-  --tint-book: #b0bdf3;
-  --book-icon: #26318f;
-  --tint-review: #a3d6b8;
-  --review-icon: #1f6b45;
-  --tint-sub: #2b2f4a;
+  --tint-follow: #eef0f6;
+  --follow-icon: #c0392b;
+  --tint-book: #eef0f6;
+  --book-icon: #3d4fc4;
+  --tint-review: #eef0f6;
+  --review-icon: #2e8b57;
+  --tint-sub: #3f4463;
+  --banner: #fbf1d6;
+  --banner-ink: #4a3a0c;
   --field: #e9ebf6;
   --gold-hi: #e8b93a;
   --gold: #c9971b;
@@ -86,7 +89,7 @@ a { color: inherit; }
 /* "Marcus sent you" line, shown when the card is opened from a friend's link. */
 .ref-banner {
   margin: 0 0 clamp(6px, calc(1.2 * var(--vh)), 14px); padding: clamp(5px, calc(1 * var(--vh)), 9px) 12px;
-  border-radius: 14px; background: var(--friend); color: var(--friend-ink);
+  border-radius: 14px; background: var(--banner); color: var(--banner-ink);
   font-size: clamp(13px, calc(2.1 * var(--vh)), 16px); line-height: 1.2; text-align: center;
 }
 .ref-banner[hidden] { display: none; }
