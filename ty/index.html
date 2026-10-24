@@ -23,7 +23,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/oswald-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/mr-dafoe-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css?v=2ceab6256c">
+<link rel="stylesheet" href="/assets/site.css?v=7c7e49ff20">
 
 
 <title>8kblends · Ty</title>
@@ -51,6 +51,14 @@
         </div>
         <button class="btn btn-primary" type="button" data-alerts-on>Turn on alerts</button>
       </div>
+      <div class="dash-card dash-paused" data-paused-card hidden>
+        <p class="dash-card-text"><b>Bookings are paused.</b> Nobody can book until you turn them back on.</p>
+        <button class="btn btn-primary" type="button" data-pause="0">Turn bookings back on</button>
+      </div>
+      <div class="dash-card" data-open-card hidden>
+        <p class="dash-card-text" data-open-text></p>
+        <a class="btn btn-primary" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Open" data-count="add-open">Add open times</a>
+      </div>
       <div class="dash-counts" role="tablist">
         <button class="dash-count" type="button" role="tab" data-tab="needs"><b data-n="needs">–</b><span>Overdue</span></button>
         <button class="dash-count" type="button" role="tab" data-tab="today"><b data-n="today">–</b><span>Today</span></button>
@@ -59,7 +67,12 @@
       </div>
       <h2 class="dash-heading" data-dash-heading>Overdue</h2>
       <div class="dash-list" data-dash-list><p class="dash-empty">Loading…</p></div>
-      <p class="dash-foot"><span data-dash-updated></span><a href="/ty/#kit">House-call kit</a></p>
+      <nav class="dash-links" aria-label="Tools">
+        <a href="/qr/">QR screen</a>
+        <a href="/ty/#kit">House-call kit</a>
+        <a href="https://calendar.google.com/calendar/r/week">Open times</a>
+      </nav>
+      <p class="dash-foot"><span data-dash-updated></span><button class="dash-pause" type="button" data-pause="1" hidden>Pause bookings</button></p>
     </section>
 
     <section class="ty-view" data-view="link" hidden>
@@ -138,9 +151,9 @@
   </main>
 </div>
 <script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "https://script.google.com/macros/s/AKfycbwviMHjZOcUVLB2PJBwBjjKKElLPbeXS-Q68Xgtw4oMO0ocJk8Ds4v7jdi9OsdoQ2rn/exec", "share_text": "Get a fresh cut from Ty The Barber 💈 Mention me when you book:", "banner": "{name} sent you! Mention {name} when you book."}</script>
-<script src="/assets/card.js?v=2ceab6256c" defer></script>
-<script src="/assets/booking-rules.js?v=2ceab6256c" defer></script>
-<script src="/assets/dash.js?v=2ceab6256c" defer></script>
-<script src="/assets/ty.js?v=2ceab6256c" defer></script>
+<script src="/assets/card.js?v=7c7e49ff20" defer></script>
+<script src="/assets/booking-rules.js?v=7c7e49ff20" defer></script>
+<script src="/assets/dash.js?v=7c7e49ff20" defer></script>
+<script src="/assets/ty.js?v=7c7e49ff20" defer></script>
 </body>
 </html>

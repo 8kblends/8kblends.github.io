@@ -188,10 +188,12 @@
   function actions(b, view, r) {
     var next = [];
     if (b.status === "Requested") next = [["Confirm", link("confirm")], ["Can't do it", link("cant")], ["Change time", link("move")]];
-    else if (b.status === "Confirmed") {
-      // On the day of the cut the messages are the quick ones above; the rest is Done or No-show.
-      if (!b.confirmSent && view !== "confirm" && view !== "moved" && !r.today) next.push(["Confirmation", link("confirm")]);
-      if (view !== "remind" && view !== "nudge" && !r.today) next.push(["Reminder", link("remind")]);
+    else if (b.status === "Confirmed" && (r.today || r.started)) {
+      // The day of the cut: the quick messages above, then Done or No-show, and the QR for the review (or pay).
+      next = [["Done", link("done")], ["No-show", link("noshow")], ["Show QR", b.total !== "" ? "/qr/#pay" : "/qr/#review"]];
+    } else if (b.status === "Confirmed") {
+      if (!b.confirmSent && view !== "confirm" && view !== "moved") next.push(["Confirmation", link("confirm")]);
+      if (view !== "remind" && view !== "nudge") next.push(["Reminder", link("remind")]);
       next.push(["Done", link("done")], ["No-show", link("noshow")], ["Change time", link("move")]);
     } else if (b.status === "Declined") {
       var picked = $("[data-quick] input:checked");

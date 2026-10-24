@@ -75,6 +75,7 @@
       : tab === "today" ? dayRows(data.today, "No cuts today.")
       : grouped(data[tab], tab === "week" ? "Nothing booked this week yet." : "Nothing booked next week yet.");
     $("[data-dash-updated]").textContent = "Updated " + new Date(data.now).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    cards();
     if (navigator.setAppBadge) navigator.setAppBadge(c.needs).catch(function () {});
   }
 
@@ -89,6 +90,31 @@
     dot.textContent = number && fresh ? (fresh > 9 ? "9+" : String(fresh)) : "";
     $('[data-tab="alerts"]').setAttribute("aria-label", fresh ? "Notifications, " + fresh + " new" : "Notifications");
   }
+
+  // Paused, or hardly any open times ahead: say so at the top. (An older Sheet script sends neither.)
+  function cards() {
+    var known = typeof data.paused === "boolean";
+    $("[data-paused-card]").hidden = !data.paused;
+    $(".dash-pause").hidden = !known || data.paused;
+    var low = !data.paused && typeof data.openDays === "number" && data.openDays < 3;
+    $("[data-open-card]").hidden = !low;
+    if (low) {
+      $("[data-open-text]").textContent = (data.openDays ? "Only " + data.openDays + (data.openDays === 1 ? " day has" : " days have") : "No days have") +
+        " open times in the next " + (data.windowDays || 10) + " days, so people can barely book. Add \"Open\" to the 8kblends calendar.";
+    }
+  }
+  document.querySelectorAll("[data-pause]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var on = b.getAttribute("data-pause") === "1";
+      if (on && !window.confirm("Pause bookings? Nobody can book until you turn them back on.")) return;
+      card.send("pause", { k: key(), on: on ? "1" : "0" }).then(function (r) {
+        if (!r || !r.ok) throw new Error("not saved");
+        data.paused = r.paused;
+        cards();
+        card.toast(r.paused ? "Bookings paused" : "Bookings are back on ✓");
+      }).catch(function () { card.toast("That didn't work. Try again"); });
+    });
+  });
 
   var ICON = { confirm: "⏳", sendConfirm: "💬", sendReminder: "⏰", notComing: "👍", after: "✂️" };
   function needsList() {
