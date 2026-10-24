@@ -122,7 +122,7 @@
     }
     referredBy = fromLink || cleanName(localStorage.getItem("referredBy"));
   } catch (e) { referredBy = ""; }
-  // Page settings from card.json (wording, Ty's number, the Sheet endpoint).
+  // Page settings from card.json (wording, the DM link, the Sheet endpoint).
   var configEl = document.getElementById("site-config");
   var config = configEl ? JSON.parse(configEl.textContent) : {};
 
@@ -132,25 +132,52 @@
     banner.hidden = false;
   }
 
-  // Send a review or booking request to the shared Google Sheet (an Apps
-  // Script web app). The reply can't be read across sites, so a request that
-  // goes out counts as sent. Resolves false when no Sheet is set up yet.
+  // The shared Google Sheet (an Apps Script web app) answers in JSON: send()
+  // posts a review or booking request, ask() reads (open times, Ty's page).
   function send(type, fields) {
-    if (!config.endpoint) return Promise.resolve(false);
+    if (!config.endpoint) return Promise.reject(new Error("no Sheet yet"));
     var body = new URLSearchParams(fields);
     body.set("type", type);
     body.set("page", location.pathname);
-    return fetch(config.endpoint, { method: "POST", mode: "no-cors", body: body })
-      .then(function () { return true; }, function () { return false; });
+    return fetch(config.endpoint, { method: "POST", body: body }).then(function (r) { return r.json(); });
   }
+  function ask(params) {
+    if (!config.endpoint) return Promise.reject(new Error("no Sheet yet"));
+    var timer;
+    var slow = new Promise(function (resolve, reject) {
+      timer = setTimeout(function () { reject(new Error("timed out")); }, 15000);
+    });
+    return Promise.race([fetch(config.endpoint + "?" + new URLSearchParams(params)).then(function (r) { return r.json(); }), slow])
+      .then(function (r) { clearTimeout(timer); return r; }, function (e) { clearTimeout(timer); throw e; });
+  }
+
+  // Paid mode is the Settings tab's switch: prices (and the QR's Pay tab) only
+  // show while it's on. The last answer is kept so pages don't flicker.
+  function setPaid(on) {
+    document.documentElement.classList.toggle("paid", !!on);
+    try { localStorage.setItem("paid", on ? "1" : "0"); } catch (e) { /* private mode */ }
+    var contact = document.querySelector('[data-mode-tab="contact"]');
+    var pay = document.querySelector('[data-mode-tab="pay"]');
+    if (!on && contact && document.body.getAttribute("data-mode") === "pay") contact.click();
+    if (on && pay && location.hash === "#pay" && document.body.getAttribute("data-mode") !== "pay") pay.click();
+  }
+  try { if (localStorage.getItem("paid") === "1") document.documentElement.classList.add("paid"); } catch (e) { /* private mode */ }
+  function loadConfig(withTimes) {
+    return ask(withTimes ? { a: "config", slots: "1" } : { a: "config" }).then(function (c) {
+      if (!c || !(c.v >= 2)) throw new Error("the Sheet script needs the v2 update");
+      setPaid(c.paid);
+      return c;
+    });
+  }
+  if (document.querySelector("[data-paid]")) loadConfig(false).catch(function () { setPaid(false); });
 
   window.card = {
     openSheet: openSheet, afterReturn: afterReturn, toast: toast,
-    copyText: copyText, count: count, cleanName: cleanName, send: send, config: config,
-    referredBy: function () { return referredBy; }
+    copyText: copyText, count: count, cleanName: cleanName, send: send, ask: ask, loadConfig: loadConfig,
+    config: config, referredBy: function () { return referredBy; }
   };
 
-  // ---------- QR screen: Contact | Review (or Tip / Pay in the drafts) ----------
+  // ---------- QR screen: Contact | Review | Pay (Pay only in paid mode) ----------
   var tabs = document.querySelectorAll("[data-mode-tab]");
   function setMode(mode) {
     document.body.setAttribute("data-mode", mode);
@@ -166,7 +193,22 @@
       tab.addEventListener("click", function () { setMode(tab.getAttribute("data-mode-tab")); });
     });
     var wanted = location.hash.slice(1);
+    if (wanted === "pay" && !document.documentElement.classList.contains("paid")) wanted = "contact";
     setMode(modes.indexOf(wanted) > 0 ? wanted : "contact");
+  }
+
+  // "Share a link": Ty's card, through the phone's own share menu (Messages,
+  // Instagram, AirDrop). It always opens the card, never this QR screen.
+  var shareCard = document.querySelector("[data-share-card]");
+  if (shareCard) {
+    shareCard.addEventListener("click", function () {
+      var url = config.site + "/";
+      if (navigator.share) {
+        navigator.share({ title: config.company, text: "Here's my card 💈", url: url }).catch(function () {});
+        return;
+      }
+      copyText(url).then(function (ok) { toast(ok ? "Link copied" : url); });
+    });
   }
 
   // Size the QR so every square covers a whole number of screen pixels:

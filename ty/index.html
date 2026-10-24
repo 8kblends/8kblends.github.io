@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#171a33">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Looking for your next Barber? Save Ty's contact in one tap, follow @8kblends and book a cut. The Bay Area, California.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="8kblends">
+<meta property="og:url" content="https://8kblends.github.io/">
+<meta property="og:title" content="Ty The Barber · @8kblends">
+<meta property="og:description" content="Looking for your next Barber? Save my contact in one tap.">
+<meta property="og:image" content="https://8kblends.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The 8kblends drip logo with a cartoon of Ty holding gold clippers">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/oswald-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/mr-dafoe-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css?v=2ceab6256c">
+
+
+<title>8kblends · Ty</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-title" content="8kblends">
+<link rel="manifest" href="/ty/manifest.webmanifest">
+</head>
+<body class="theme-lightning ty-page">
+<div class="wrap">
+  <main class="panel">
+    <section data-view="loading">
+      <p class="book-wait">Loading…</p>
+    </section>
+
+    <section class="dash" data-view="dash" hidden>
+      <header class="dash-top">
+        <img class="dash-logo" src="/assets/logo.webp" width="994" height="599" alt="8kblends">
+        <button class="dash-icon" type="button" data-tab="alerts" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i class="dash-dot" data-dash-dot hidden></i></button>
+      </header>
+      <div class="dash-card" data-alerts-card hidden>
+        <p class="dash-card-text" data-alerts-text>Turn on alerts so this phone buzzes for new requests and reminders.</p>
+        <div class="dash-roles" data-alerts-roles>
+          <label class="check"><input type="checkbox" value="ty" checked>Booking alerts (Ty)</label>
+          <label class="check"><input type="checkbox" value="corey">Manager alerts (Corey)</label>
+        </div>
+        <button class="btn btn-primary" type="button" data-alerts-on>Turn on alerts</button>
+      </div>
+      <div class="dash-counts" role="tablist">
+        <button class="dash-count" type="button" role="tab" data-tab="needs"><b data-n="needs">–</b><span>Overdue</span></button>
+        <button class="dash-count" type="button" role="tab" data-tab="today"><b data-n="today">–</b><span>Today</span></button>
+        <button class="dash-count" type="button" role="tab" data-tab="week"><b data-n="week">–</b><span>This week</span></button>
+        <button class="dash-count" type="button" role="tab" data-tab="next"><b data-n="next">–</b><span>Next week</span></button>
+      </div>
+      <h2 class="dash-heading" data-dash-heading>Overdue</h2>
+      <div class="dash-list" data-dash-list><p class="dash-empty">Loading…</p></div>
+      <p class="dash-foot"><span data-dash-updated></span><a href="/ty/#kit">House-call kit</a></p>
+    </section>
+
+    <section class="ty-view" data-view="link" hidden>
+      <h2 class="step-title">Open your dashboard link</h2>
+      <p class="done-text">Open the link from the Sheet (8kblends menu → Ty's dashboard link) on this phone once. After that it's remembered.</p>
+      <form class="book-form" data-link-form>
+        <label class="field"><span>Or paste it here</span><input name="link" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="https://8kblends.github.io/ty/?d=…"></label>
+        <button class="btn btn-primary" type="submit">Open</button>
+      </form>
+    </section>
+
+    <section class="ty-view" data-view="message" hidden>
+      <a class="dash-back" href="/ty/" data-dash-back hidden>‹ All appointments</a>
+      <p class="ty-kicker" data-kicker>Message ready</p>
+      <p class="ty-status" data-status></p>
+      <p class="ty-to" data-to></p>
+      <div class="ty-client" data-client hidden>
+        <p class="ty-client-row"><span class="ty-client-line" data-client-line></span><button class="ty-note-edit" type="button" data-note-edit>Add a note</button></p>
+        <p class="ty-note" data-note-text hidden></p>
+        <form class="ty-note-form" data-note-form hidden>
+          <label class="visually-hidden" for="ty-note">Note about this client</label>
+          <input id="ty-note" name="note" maxlength="200" autocomplete="off" placeholder="Low taper, #2 on the sides…">
+          <button class="btn btn-soft" type="submit">Save</button>
+        </form>
+      </div>
+      <dl class="ty-details" data-details></dl>
+      <fieldset class="chips ty-chips" data-quick hidden><legend data-quick-label></legend></fieldset>
+      <label class="visually-hidden" for="ty-message">Message</label>
+      <textarea class="ty-bubble" id="ty-message" data-message rows="4"></textarea>
+      <a class="btn btn-primary btn-stack" href="#" data-send-msg><span data-send-label>Copy &amp; open DM</span><span class="sub" data-send-sub></span></a>
+      <p class="ty-track" data-track hidden><span aria-hidden="true">✓</span>This tap logs it as sent.</p>
+      <div class="ty-next" data-next hidden>
+        <p class="ty-next-left" data-next-left></p>
+        <a class="btn btn-stack btn-next" href="/ty/" data-next-link><span data-next-title></span><span class="sub" data-next-sub></span></a>
+      </div>
+      <div class="ty-actions" data-actions></div>
+    </section>
+
+    <section class="ty-view" data-view="pick" hidden>
+      <a class="dash-back" href="/ty/" data-pick-back>‹ Back</a>
+      <p class="ty-kicker" data-pick-kicker>Change time</p>
+      <p class="ty-status" data-pick-status></p>
+      <fieldset class="days">
+        <legend>Pick a day</legend>
+        <div class="pick-days" data-pick-days></div>
+      </fieldset>
+      <fieldset class="times">
+        <legend data-pick-times-label>Open times</legend>
+        <div class="pick-times" data-pick-times></div>
+      </fieldset>
+      <p class="promise" data-pick-note></p>
+      <button class="btn btn-primary" type="button" data-pick-go disabled>Pick a time</button>
+    </section>
+
+    <section class="ty-view" data-view="kit" hidden>
+      <a class="dash-back" href="/ty/" data-dash-back hidden>‹ All appointments</a>
+      <h2 class="step-title">House-call kit</h2>
+      <ul class="kit">
+        <li><label class="check"><input type="checkbox">Ring light</label></li>
+        <li><label class="check"><input type="checkbox">Folding chair</label></li>
+        <li><label class="check"><input type="checkbox">Mat or tarp for hair</label></li>
+        <li><label class="check"><input type="checkbox">Regular mirror</label></li>
+        <li><label class="check"><input type="checkbox">One-hand + two-hand mirrors</label></li>
+        <li><label class="check"><input type="checkbox">Cape + neck strips</label></li>
+        <li><label class="check"><input type="checkbox">Clippers + trimmers, charged</label></li>
+        <li><label class="check"><input type="checkbox">Disinfectant spray or wipes</label></li>
+        <li><label class="check"><input type="checkbox">Extension cord · spray bottle</label></li>
+      </ul>
+      <p class="arrive"><small>At the door</small>"Where's the best place for us to set up?"<span>Backyard or indoors both work.</span></p>
+    </section>
+
+    <section class="ty-view" data-view="error" hidden>
+      <h2 class="step-title">Link not found</h2>
+      <p class="done-text">This link is old or incomplete. Open the newest alert, or check the Bookings tab.</p>
+    </section>
+  </main>
+</div>
+<script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "https://script.google.com/macros/s/AKfycbwviMHjZOcUVLB2PJBwBjjKKElLPbeXS-Q68Xgtw4oMO0ocJk8Ds4v7jdi9OsdoQ2rn/exec", "share_text": "Get a fresh cut from Ty The Barber 💈 Mention me when you book:", "banner": "{name} sent you! Mention {name} when you book."}</script>
+<script src="/assets/card.js?v=2ceab6256c" defer></script>
+<script src="/assets/booking-rules.js?v=2ceab6256c" defer></script>
+<script src="/assets/dash.js?v=2ceab6256c" defer></script>
+<script src="/assets/ty.js?v=2ceab6256c" defer></script>
+</body>
+</html>

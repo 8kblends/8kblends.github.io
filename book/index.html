@@ -23,73 +23,112 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/oswald-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/mr-dafoe-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css?v=bd079c6e91">
+<link rel="stylesheet" href="/assets/site.css?v=2ceab6256c">
 
 
 <title>Book a cut · 8kblends</title>
 <link rel="canonical" href="https://8kblends.github.io/book/">
 <link rel="manifest" href="/manifest.webmanifest">
 </head>
-<body class="theme-lightning book-page">
-<a class="back-chip" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Card</a>
-
+<body class="theme-lightning book-page" data-at="service">
+<a class="back-chip" href="/" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span data-back-label>Card</span></a>
 <div class="wrap">
   <header class="masthead">
     <img class="logo logo-sm" src="/assets/logo.webp" width="994" height="599" alt="8kblends, Crafted with Detail">
-    <h1 class="byline">Tyler Campbell <span aria-hidden="true">·</span> Bay Area</h1>
+    <h1 class="byline">Tyler Campbell <span aria-hidden="true">·</span> House calls · Bay Area</h1>
   </header>
 
   <main class="panel">
-    <h2 class="hook">Let's get you in the chair</h2>
-    <form class="book-form" data-book-form>
-      <div class="field-row">
+    <form class="book-form" data-book-form novalidate>
+      <section class="step" data-step="service">
+        <h2 class="hook">Let's get you in the chair</h2>
+        <fieldset class="chips" data-services>
+          <legend>Choose a service</legend>
+          <label class="chip"><input type="checkbox" name="service" value="haircut"><span>Haircut<small data-why></small></span></label>
+          <label class="chip"><input type="checkbox" name="service" value="beard"><span>Beard trim<small data-why></small></span></label>
+          <label class="chip"><input type="checkbox" name="service" value="lineup"><span>Lineup<small data-why></small></span></label>
+          <label class="chip"><input type="checkbox" name="service" value="full"><span>Full package<small data-why></small></span></label>
+        </fieldset>
+        <p class="book-note" data-service-note aria-live="polite"></p>
+        <fieldset class="days">
+          <legend>Pick a day</legend>
+          <div class="day-grid" data-day-grid></div>
+        </fieldset>
+        <fieldset class="times" data-times hidden>
+          <legend data-times-label>Open times</legend>
+          <div class="time-scroller">
+            <button class="time-arrow left" type="button" data-scroll="-1" aria-label="Earlier">‹</button>
+            <div class="time-row" data-time-row></div>
+            <button class="time-arrow right" type="button" data-scroll="1" aria-label="Later">›</button>
+          </div>
+        </fieldset>
+        <p class="book-wait" data-loading>Loading the calendar…</p>
+        <button class="btn btn-primary" type="button" data-next="you" disabled>Next</button>
+      </section>
+
+      <section class="step" data-step="you" hidden>
+        <p class="book-summary" data-summary></p>
         <label class="field"><span>First name</span><input name="first" autocomplete="given-name" maxlength="30" required></label>
-        <label class="field"><span>Last name</span><input name="last" autocomplete="family-name" maxlength="30" required></label>
-      </div>
-      <fieldset class="chips">
-        <legend>What do you want?</legend>
-        <label class="chip"><input type="radio" name="service" value="Cut" required><span>Cut</span></label>
-        <label class="chip"><input type="radio" name="service" value="Cut + beard"><span>Cut + beard</span></label>
-        <label class="chip"><input type="radio" name="service" value="Line up"><span>Line up</span></label>
-        <label class="chip"><input type="radio" name="service" value="Not sure"><span>Not sure</span></label>
-      </fieldset>
-      <fieldset class="chips">
-        <legend>When works?</legend>
-        <label class="chip"><input type="radio" name="day" value="This week"><span>This week</span></label>
-        <label class="chip"><input type="radio" name="day" value="Weekday"><span>Weekday</span></label>
-        <label class="chip"><input type="radio" name="day" value="Weekend"><span>Weekend</span></label>
-        <label class="chip"><input type="radio" name="time" value="Morning"><span>Morning</span></label>
-        <label class="chip"><input type="radio" name="time" value="Afternoon"><span>Afternoon</span></label>
-        <label class="chip"><input type="radio" name="time" value="Evening"><span>Evening</span></label>
-      </fieldset>
-      <label class="field field-inline"><span>Who sent you?</span><input name="ref" maxlength="30" placeholder="Optional"></label>
+        <label class="field" data-handle-field><span>Your @handle</span><input name="handle" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="40" placeholder="@" required></label>
+        <label class="field" data-phone-field hidden><span>Your phone number</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20"></label>
+        <button class="link-btn" type="button" data-swap>No Instagram? I can text you instead</button>
+        <label class="field"><span>Who sent you? (optional)</span><input name="ref" maxlength="30"></label>
+        <p class="book-error" data-error="you" aria-live="polite"></p>
+        <button class="btn btn-primary" type="button" data-next="where">Next</button>
+      </section>
+
+      <section class="step" data-step="where" hidden>
+        <h2 class="step-title">Where am I headed?</h2>
+        <label class="field"><span>Street address</span><input name="address" autocomplete="street-address" maxlength="120" required></label>
+        <label class="field"><span>City</span><select name="city" data-city-select hidden></select><input name="city_text" data-city-text autocomplete="address-level2" maxlength="40"></label>
+        <p class="area-note" data-area-note hidden><a href="https://ig.me/m/8kblends" data-count="book-area-dm">Somewhere else? DM me</a><span data-paid="on">Farther drives may add a small travel fee.</span></p>
+        <fieldset class="chips">
+          <legend>Best place to set up?</legend>
+        <label class="chip"><input type="radio" name="setup" value="Backyard"><span>Backyard</span></label>
+        <label class="chip"><input type="radio" name="setup" value="Indoors"><span>Indoors</span></label>
+        <label class="chip"><input type="radio" name="setup" value="Garage"><span>Garage</span></label>
+        <label class="chip"><input type="radio" name="setup" value="Not sure yet"><span>Not sure yet</span></label>
+        </fieldset>
+        <p class="setup-hint">All I need is room for a chair and an outlet nearby.</p>
+        <label class="field"><span>Parking or gate notes (optional)</span><input name="notes" maxlength="200"></label>
+        <p class="book-error" data-error="where" aria-live="polite"></p>
+        <button class="btn btn-primary" type="button" data-next="review">Next</button>
+      </section>
+
+      <section class="step" data-step="review" hidden>
+        <h2 class="step-title" data-review-title>Almost done</h2>
+        <p class="step-sub">Here's your appointment. Give it a quick look.</p>
+        <p class="book-when" data-when></p>
+        <p class="receipt-label">What's included</p>
+        <ul class="receipt" data-items></ul>
+        <p class="total-line" data-total-line hidden><span>Total</span><b data-total></b></p>
+        <p class="promise">I usually confirm within a couple of hours.</p>
+        <p class="book-error" data-error="review" aria-live="polite"></p>
+        <button class="btn btn-primary" type="submit" data-send>Send request</button>
+        <button class="link-btn" type="button" data-send-dm>Prefer Instagram? Book in my DMs</button>
+      </section>
+
+      <section class="step step-done" data-step="sent" hidden>
+        <span class="done-mark" aria-hidden="true">✓</span>
+        <h2 class="step-title">Request sent</h2>
+        <p class="done-text" data-sent-text>Your time is held. I'll confirm shortly, usually within a couple of hours.</p>
+        <a class="btn btn-primary btn-stack" href="https://www.instagram.com/8kblends/" data-follow data-count="book-follow"><span>Follow @8kblends</span><span class="sub" data-follow-sub>so my message reaches your inbox</span></a>
+        <a class="btn btn-soft" href="#" data-ics download="8kblends.ics" data-count="book-calendar">Add to your calendar</a>
+      </section>
+
+      <section class="step step-done" data-step="down" hidden>
+        <h2 class="step-title">Quick break</h2>
+        <p class="done-text">The calendar isn't loading right now. DM me and I'll find you a time.</p>
+        <a class="btn btn-primary" href="https://ig.me/m/8kblends" data-count="book-down-dm">Open Instagram</a>
+      </section>
+
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button class="btn btn-primary" type="submit">Request my spot</button>
     </form>
   </main>
-
-
 </div>
-
-<dialog class="sheet" id="book-dm" aria-labelledby="book-dm-title">
-  <form method="dialog" class="sheet-close-form">
-    <button class="sheet-close" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-    </button>
-  </form>
-  <p class="sheet-kicker">Last step</p>
-  <h2 class="sheet-title" id="book-dm-title">Almost booked</h2>
-  <p class="sheet-text">Your message is copied. Paste it in my DMs and I'll confirm your time.</p>
-  <p class="dm-preview" data-dm-preview></p>
-  <a class="btn btn-primary" href="https://ig.me/m/8kblends" data-dm-open data-count="book-dm">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>
-    Open Instagram
-  </a>
-
-  <form method="dialog"><button class="sheet-later">Done</button></form>
-</dialog>
-<script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "phone": "+19254811969", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "https://script.google.com/macros/s/AKfycbwviMHjZOcUVLB2PJBwBjjKKElLPbeXS-Q68Xgtw4oMO0ocJk8Ds4v7jdi9OsdoQ2rn/exec", "share_text": "Get a fresh cut from Ty The Barber 💈 Mention me when you book:", "banner": "{name} sent you! Mention {name} when you book."}</script>
-<script src="/assets/card.js?v=bd079c6e91" defer></script>
-<script src="/assets/book.js?v=bd079c6e91" defer></script>
+<script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "https://script.google.com/macros/s/AKfycbwviMHjZOcUVLB2PJBwBjjKKElLPbeXS-Q68Xgtw4oMO0ocJk8Ds4v7jdi9OsdoQ2rn/exec", "share_text": "Get a fresh cut from Ty The Barber 💈 Mention me when you book:", "banner": "{name} sent you! Mention {name} when you book."}</script>
+<script src="/assets/card.js?v=2ceab6256c" defer></script>
+<script src="/assets/booking-rules.js?v=2ceab6256c" defer></script>
+<script src="/assets/book.js?v=2ceab6256c" defer></script>
 </body>
 </html>

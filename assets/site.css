@@ -210,8 +210,8 @@ a { color: inherit; }
 .qr-page { background: var(--bolt-wash) url("/assets/lightning.jpg") center / cover no-repeat; }
 .qr-stage {
   display: grid;
-  grid-template-rows: auto auto auto auto minmax(0, 1fr);
-  grid-template-areas: "tabs" "hook" "qr" "cta" "scene";
+  grid-template-rows: auto auto auto auto auto minmax(0, 1fr);
+  grid-template-areas: "tabs" "hook" "qr" "cta" "actions" "scene";
   justify-items: center;
   height: calc(100 * var(--vh));
   padding: calc(12px + env(safe-area-inset-top)) 16px 0;
@@ -230,8 +230,12 @@ a { color: inherit; }
 }
 .qr-tabs button[aria-selected="true"] { background: var(--primary); color: var(--primary-ink); }
 .qr-tabs button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* Each tab shows only its own hook, QR and line (Review and Pay share the
+   same grid cells, so both must hide whenever the other is on). */
 [data-mode="contact"] [data-for]:not([data-for="contact"]),
-[data-mode]:not([data-mode="contact"]) [data-for="contact"] { display: none; }
+[data-mode="review"] [data-for]:not([data-for="review"]),
+[data-mode="tip"] [data-for]:not([data-for="tip"]),
+[data-mode="pay"] [data-for]:not([data-for="pay"]) { display: none; }
 
 .qr-hook {
   grid-area: hook; margin: calc(1.4 * var(--vh)) 0 0;
@@ -262,10 +266,16 @@ a { color: inherit; }
 .qr-scene .qr-avatar { grid-column: 3; max-width: 34vw; }
 /* Variant B: the same customer, facing the other way. */
 [data-variant="b"] .qr-chair { transform: scaleX(-1); }
-.qr-back {
-  position: fixed; top: calc(8px + env(safe-area-inset-top)); right: 14px;
-  font-size: 13px; color: var(--ink-2); opacity: .65;
+/* Big, easy buttons under the QR: open the card (when they'd rather tap than
+   scan) and share it (Messages, Instagram, AirDrop...). */
+.qr-actions {
+  grid-area: actions; display: grid; gap: 8px; width: min(100%, 300px);
+  margin-top: calc(2 * var(--vh)); position: relative; z-index: 1;
 }
+.qr-actions .btn { justify-content: center; min-height: clamp(42px, calc(6.6 * var(--vh)), 52px); }
+.qr-actions .btn-primary { font-size: clamp(16px, calc(2.4 * var(--vh)), 19px); }
+.qr-actions .btn-soft { background: rgba(255, 255, 255, .94); box-shadow: 0 4px 14px rgba(30, 40, 110, .14); min-height: clamp(38px, calc(5.6 * var(--vh)), 46px); font-size: clamp(14px, calc(2 * var(--vh)), 16px); }
+.qr-actions .btn svg { width: 20px; height: 20px; }
 
 /* Phone turned sideways: pole and customer on the left, QR center, Ty right. */
 @media (orientation: landscape) and (max-height: 640px) {
@@ -284,7 +294,7 @@ a { color: inherit; }
   .qr-scene .qr-pole { left: max(28px, env(safe-area-inset-left)); top: 40%; height: 34vh; margin: 0; transform: translateY(-50%); }
   .qr-scene .qr-chair { left: max(14%, env(safe-area-inset-left)); bottom: 0; height: 52vh; }
   .qr-scene .qr-avatar { right: max(20px, env(safe-area-inset-right)); bottom: 0; height: 90vh; }
-  .qr-back { display: none; }
+  .qr-actions { position: absolute; right: max(120px, 18vw); bottom: 12px; width: 220px; margin: 0; }
 }
 
 /* ---------- Pay page ---------- */
@@ -397,3 +407,246 @@ a { color: inherit; }
   margin: clamp(6px, calc(1 * var(--vh)), 10px) 0 0; text-align: center;
   font: 400 clamp(22px, calc(3.4 * var(--vh)), 28px)/1 var(--script); color: var(--accent);
 }
+
+/* Prices (and the QR's Pay tab) only show while the Settings tab's Paid mode is on. */
+html:not(.paid) [data-paid="on"], html.paid [data-paid="off"] { display: none !important; }
+
+/* ---------- Booking (/book/): one step at a time ---------- */
+.step, .ty-view, .ok-view { display: grid; gap: clamp(7px, calc(1.2 * var(--vh)), 12px); }
+.step[hidden], [data-view][hidden], [hidden].field, .field [hidden], .link-btn[hidden], .btn[hidden] { display: none; }
+.book-page .logo-sm, .ok-page .logo-sm { max-height: calc(9 * var(--vh)); }
+.book-page .hook { margin-bottom: 0; }
+.step-title {
+  margin: 0; text-align: center;
+  font: 600 clamp(19px, calc(2.8 * var(--vh)), 23px)/1.1 var(--display); letter-spacing: .05em; text-transform: uppercase;
+}
+.chip [data-why]:not(:empty) { margin-left: 6px; font-size: 12px; font-weight: 500; color: var(--ink-2); }
+.chip input:disabled + span { opacity: .5; cursor: default; }
+.book-note { margin: 0; padding: 6px 10px; border-radius: 10px; background: var(--banner); color: var(--banner-ink); text-align: center; font-size: 14px; }
+.book-note:empty, .book-error:empty { display: none; }
+.days, .times { margin: 0; padding: 0; border: 0; min-width: 0; }
+.days legend, .times legend {
+  width: 100%; margin: 0 0 5px; padding: 0; text-align: center;
+  font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2);
+}
+.times[hidden], .book-wait[hidden], .time-arrow[hidden], .total-line[hidden], .area-note[hidden] { display: none; }
+.day-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+.day {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-height: clamp(40px, calc(6.4 * var(--vh)), 52px); padding: 3px 0;
+  border: 0; border-radius: 11px; background: var(--field); color: var(--ink-2);
+  font: 500 11px/1 var(--display); letter-spacing: .04em; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.day b { font: 600 clamp(16px, calc(2.5 * var(--vh)), 19px)/1 var(--display); color: var(--ink); }
+.day small { font-size: 10px; }
+.day:disabled { opacity: .42; cursor: default; }
+.day[aria-pressed="true"] { background: var(--primary); color: var(--primary-ink); }
+.time-scroller { position: relative; }
+.time-row {
+  display: flex; gap: 6px; overflow-x: auto; padding: 2px 0;
+  scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.time-row::-webkit-scrollbar { display: none; }
+.time {
+  flex: none; min-height: clamp(36px, calc(5.4 * var(--vh)), 44px); padding: 0 13px;
+  border: 0; border-radius: 999px; background: var(--field); color: var(--ink);
+  font: 600 clamp(14px, calc(2.1 * var(--vh)), 16px)/1 var(--display); white-space: nowrap;
+  scroll-snap-align: start; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.time[aria-pressed="true"] { background: var(--primary); color: var(--primary-ink); }
+.time-arrow {
+  position: absolute; top: 50%; z-index: 1; width: 30px; height: 30px; margin-top: -15px;
+  border: 0; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(30, 40, 110, .25);
+  color: var(--accent); font: 600 20px/1 var(--display); cursor: pointer;
+}
+.time-arrow.left { left: -8px; }
+.time-arrow.right { right: -8px; }
+.book-wait { margin: 0; text-align: center; font-size: 15px; color: var(--ink-2); }
+.step .btn-primary, .ty-view .btn-primary, .ok-view .btn-primary { justify-content: center; }
+.btn[disabled] { opacity: .45; box-shadow: none; cursor: default; }
+.btn-soft { justify-content: center; background: var(--field); }
+.btn-stack { flex-direction: column; justify-content: center; gap: 4px; white-space: normal; text-align: center; }
+.btn-stack .sub { margin: 0; text-align: center; color: var(--primary-ink); font-size: 13px; }
+.book-summary, .book-when {
+  margin: 0; padding: 9px 12px; border-radius: 14px; background: var(--bolt-wash);
+  text-align: center; font-weight: 600; font-size: 15px;
+}
+.book-when { display: grid; gap: 3px; }
+.book-when span { font-weight: 500; font-size: 14px; color: var(--ink-2); }
+.link-btn {
+  justify-self: center; padding: 4px; border: 0; background: none; color: var(--ink);
+  font: 500 15px/1.2 var(--display); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.book-error { margin: 0; text-align: center; font-size: 14px; color: #b3261e; }
+.field select {
+  width: 100%; min-height: clamp(40px, calc(6 * var(--vh)), 48px); padding: 0 12px;
+  border: 0; border-radius: 12px; background: var(--field); color: var(--ink);
+  font: 500 17px/1 var(--display); -webkit-appearance: none; appearance: none;
+}
+.ok-page .field input, .ty-page .field input { min-height: clamp(40px, calc(6 * var(--vh)), 48px); }
+.area-note { margin: -2px 0 0; display: grid; justify-items: center; gap: 2px; text-align: center; font-size: 14px; color: var(--ink-2); }
+.area-note a { color: var(--ink); font-weight: 500; text-underline-offset: 3px; }
+.setup-hint { margin: -2px 0 0; text-align: center; font-size: 13px; color: var(--ink-2); }
+.step-sub { margin: -4px 0 0; text-align: center; font-size: 14px; color: var(--ink-2); }
+/* The overview reads like a receipt: ticks and dotted leaders, nothing that looks tappable. */
+.receipt-label {
+  margin: 0; text-align: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2);
+}
+.receipt { margin: 0; padding: 0 2px; list-style: none; display: grid; gap: 7px; }
+.receipt li { display: grid; gap: 1px; }
+.receipt-top { display: flex; align-items: baseline; gap: 7px; }
+.receipt .tick { flex: none; color: #2e8b57; font-weight: 600; font-size: 15px; }
+.receipt b { font-size: 16px; font-weight: 600; }
+.receipt i { flex: 1; min-width: 12px; border-bottom: 2px dotted #c9cde0; transform: translateY(-4px); }
+.receipt em { font-style: normal; font-weight: 600; font-size: 16px; white-space: nowrap; }
+.receipt small { padding-left: 22px; font-size: 13px; color: var(--ink-2); }
+.receipt-special b, .receipt-special em { color: #1f6b45; }
+.receipt-special small { padding-left: 0; }
+.total-line {
+  margin: 0; display: flex; justify-content: space-between; align-items: baseline; padding: 8px 2px 0;
+  border-top: 2px dashed #c9cde0;
+  font-size: 15px; letter-spacing: .06em; text-transform: uppercase;
+}
+.total-line b { font-size: 24px; letter-spacing: 0; }
+.promise { margin: 0; text-align: center; font-size: 14px; color: var(--ink-2); }
+.step-done { justify-items: center; text-align: center; }
+.step-done .btn { width: 100%; }
+.done-mark { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: #dcefe3; color: #1f6b45; font-size: 30px; }
+.done-text { margin: 0; font-size: 16px; line-height: 1.35; }
+/* Short phones: the booking steps drop the header (and the review page its
+   logo, once the @handle box opens) so each one still fits on one screen. */
+@media (max-height: 600px) {
+  .book-page .masthead, .review-page.remind-open .logo { display: none; }
+}
+/* Ty's page on shorter phones (SE, small Androids): a capped message box and fewer labels. */
+@media (max-height: 660px) {
+  .ty-page .ty-bubble { min-height: 0; height: 92px; }  /* the message still scrolls inside; the buttons stay on screen */
+  .ty-page .ty-actions .btn { min-height: 38px; }
+  .ty-page .ty-kicker, .ty-page .ty-chips legend { display: none; }
+  .ty-page .ty-client { padding: 5px 10px; }
+  .ty-page .ty-details { font-size: 13px; gap: 2px; }
+}
+
+/* ---------- Ty's page (/ty/) ---------- */
+.ty-kicker { margin: 0; text-align: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.ty-status { margin: 0; padding: 9px 12px; border-radius: 12px; background: #e3e6f0; text-align: center; font-weight: 600; font-size: 15px; }
+.ty-status.good { background: #dcefe3; color: #14532d; }
+.ty-status.wait { background: var(--banner); color: var(--banner-ink); }
+.ty-to { margin: 0; font-size: 14px; color: var(--ink-2); }
+.ty-details { margin: 0; display: grid; gap: 4px; font-size: 14px; }
+.ty-details div { display: grid; grid-template-columns: 62px 1fr; gap: 8px; }
+.ty-details dt { color: var(--ink-2); }
+.ty-details dd { margin: 0; }
+.ty-bubble {
+  width: 100%; min-height: 60px; padding: 12px 14px; border: 0; border-radius: 18px 18px 4px 18px;
+  background: var(--bolt-wash); color: var(--ink); font: 400 16px/1.4 var(--display); resize: vertical;
+}
+.ty-bubble[hidden] { display: none; }
+.ty-track { margin: 0; display: flex; justify-content: center; align-items: center; gap: 7px; font-size: 14px; color: #14532d; }
+.ty-track[hidden] { display: none; }
+.ty-track span { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #dcefe3; font-size: 11px; }
+.ty-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; }
+.ty-actions:empty { display: none; }
+.ty-actions .btn { min-height: 42px; padding: 0 8px; font-size: 14px; }
+.ty-actions .wide { grid-column: 1 / -1; }
+/* Who this is: visits, last cut, what they usually get, Ty's own note. */
+.ty-client { display: grid; gap: 3px; padding: 7px 12px; border-radius: 12px; background: #f3f4fa; font-size: 14px; }
+.ty-client-row { margin: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.ty-client[hidden], .ty-note[hidden], .ty-note-form[hidden], .ty-note-edit[hidden], .ty-chips[hidden], .ty-next[hidden], .btn-next[hidden], .ty-actions .btn[hidden] { display: none; }
+.ty-client-line { font-weight: 600; }
+.ty-note { margin: 0; color: var(--ink-2); font-style: italic; }
+.ty-note-edit { flex: none; padding: 2px 0; border: 0; background: none; color: var(--accent); font: 600 13px/1.2 var(--display); cursor: pointer; }
+.ty-note-form { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+.ty-note-form input { min-width: 0; min-height: 38px; padding: 0 10px; border: 0; border-radius: 10px; background: #fff; font: 400 15px var(--display); color: var(--ink); }
+.ty-note-form .btn { width: auto; min-height: 38px; padding: 0 14px; font-size: 14px; }
+/* Chips above the message: other times, cut-day messages, the next cut. */
+.ty-chips legend { margin-bottom: 4px; font-size: 12px; }
+.ty-chips .chip span { min-height: 32px; padding: 0 10px; font-size: 14px; }
+/* After sending: the next Overdue task. */
+.ty-next { display: grid; gap: 6px; }
+.ty-next-left { margin: 0; text-align: center; font-size: 14px; font-weight: 600; color: #14532d; }
+.btn-next { background: #2e8b57; color: #fff; }
+.btn-next .sub { color: #e3f3ea; }
+/* Change time / Book again: open days in a row that scrolls, then that day's times. */
+.pick-days { display: flex; gap: 5px; overflow-x: auto; padding: 2px 0; scrollbar-width: none; }
+.pick-days::-webkit-scrollbar { display: none; }
+.pick-days .day { flex: none; width: 54px; }
+.pick-times { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.ty-view .btn:disabled { opacity: .55; cursor: default; }
+.kit { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.arrive { margin: 6px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--bolt-wash); display: grid; gap: 4px; font: 400 24px/1.1 var(--script); }
+.arrive small { font: 600 12px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.arrive span { font: 500 14px/1.3 var(--display); color: var(--ink-2); }
+
+/* ---------- The customer's page (/ok/) ---------- */
+.ok-view { text-align: center; }
+.ok-page .hook { margin-bottom: 0; }
+.ok-where { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: var(--field); text-align: left; font-size: 15px; }
+.ok-where[hidden], .ok-edit[hidden], .done-text[hidden] { display: none; }
+.ok-where-text { flex: 1; }
+.ok-spot[hidden] { display: none; }
+.ty-ask { color: #8a5a00; font-weight: 600; }
+.ok-edit { text-align: left; }
+.field-indent { padding-left: 32px; }
+.field-indent[hidden] { display: none; }
+.back-chip[hidden] { display: none; }
+
+/* ---------- Ty's dashboard (/ty/): fills the screen, only the list scrolls ---------- */
+.dash-on .wrap { justify-content: flex-start; height: calc(100 * var(--vh)); min-height: 0; }
+.dash-on .panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.dash { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
+.dash[hidden] { display: none; }
+.dash-top { display: flex; align-items: center; justify-content: space-between; }
+.dash-logo { height: 40px; width: auto; }
+.dash-icon {
+  position: relative; display: grid; place-items: center; width: 42px; height: 42px;
+  border: 0; border-radius: 12px; background: var(--field); color: var(--ink); cursor: pointer;
+}
+.dash-icon svg { width: 22px; height: 22px; }
+.dash-icon[aria-selected="true"] { background: var(--primary); }
+.dash-dot { position: absolute; top: 7px; right: 8px; width: 11px; height: 11px; border: 2px solid #fff; border-radius: 50%; background: #d0342c; }
+.dash-dot.num { top: 1px; right: 1px; width: auto; min-width: 21px; height: 21px; padding: 0 5px; border-radius: 999px;
+  color: #fff; font: 600 12px/17px var(--display); font-style: normal; text-align: center; }
+.dash-dot[hidden] { display: none; }
+.dash-card { display: grid; gap: 8px; padding: 12px; border-radius: 14px; background: var(--banner); color: var(--banner-ink); }
+.dash-card[hidden], .dash-roles[hidden], .dash-card .btn[hidden] { display: none; }
+.dash-card-text { margin: 0; font-size: 15px; line-height: 1.3; }
+.dash-roles { display: grid; gap: 4px; font-size: 15px; }
+.dash-counts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.dash-count {
+  display: grid; justify-items: center; gap: 3px; padding: 9px 2px 8px;
+  border: 0; border-radius: 14px; background: var(--field); color: var(--ink);
+  font-family: var(--display); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.dash-count b { font-size: 26px; line-height: 1; font-weight: 600; }
+.dash-count span { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+.dash-count.hot b { color: #b3261e; }
+.dash-count[aria-selected="true"] { background: var(--primary); box-shadow: 0 6px 16px var(--primary-shadow); }
+.dash-count[aria-selected="true"] span { color: var(--primary-ink); }
+.dash-heading { margin: 2px 0 0; font: 600 13px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.dash-list {
+  flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: 6px;
+  margin: 0 -4px; padding: 0 4px 4px; -webkit-overflow-scrolling: touch;
+}
+.dash-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: #f3f4fa; color: var(--ink); text-decoration: none; }
+a.dash-row:active { background: var(--field); }
+.dash-main { display: grid; gap: 1px; flex: 1; min-width: 0; }
+.dash-main b { overflow: hidden; font-size: 16px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.dash-main small { overflow: hidden; font-size: 13px; color: var(--ink-2); text-overflow: ellipsis; white-space: nowrap; }
+.note .dash-main small { display: -webkit-box; white-space: normal; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.dash-ic { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #fff; font-size: 17px; }
+.dash-go { flex: none; color: var(--accent); font-size: 22px; line-height: 1; }
+.dash-time { flex: none; width: 60px; font-size: 14px; font-weight: 600; }
+.dash-when { flex: none; max-width: 72px; font-size: 12px; color: var(--ink-2); text-align: right; }
+.dash-pill { flex: none; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.dash-pill.wait { background: var(--banner); color: var(--banner-ink); }
+.dash-pill.ok { background: #dcefe3; color: #14532d; }
+.dash-pill.done { background: #e3e6f0; color: var(--ink-2); }
+.dash-pill.hand { background: #e9e4fb; color: #3b2f86; }
+.dash-pill.off { background: #f6dede; color: #8a1c1c; }
+.dash-ask { color: #8a5a00; font-weight: 600; }
+.dash-day { margin: 6px 2px 0; font-size: 13px; font-weight: 600; letter-spacing: .04em; color: var(--ink-2); }
+.dash-empty { margin: 16px 0; text-align: center; color: var(--ink-2); }
+.dash-foot { display: flex; justify-content: space-between; gap: 10px; margin: 0; font-size: 13px; color: var(--ink-2); }
+.dash-back { justify-self: start; color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: none; }
+.dash-back[hidden] { display: none; }

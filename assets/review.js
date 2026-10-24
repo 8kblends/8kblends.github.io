@@ -1,12 +1,25 @@
-// "Rate your cut": stars, first + last name, an optional comment and OK to
-// post. Goes to the shared Google Sheet, which alerts Ty. With no Sheet set up
-// yet, the review goes to Ty as a text instead. Then: post your cut and tag.
+// "Rate your cut": stars, first + last name, an optional comment, OK to post,
+// and "Want a reminder in 2-3 weeks?" (which asks for an @handle unless they
+// booked on this phone). Goes to the shared Google Sheet, which alerts Ty.
+// Then: post your cut and tag.
 (function () {
   "use strict";
 
   var card = window.card;
+  var booked = "";
+  try { booked = localStorage.getItem("bookedHandle") || ""; } catch (e) { booked = ""; }
 
   document.querySelectorAll("[data-review-form]").forEach(function (form) {
+    var remind = form.querySelector("[data-remind]");
+    var handleField = form.querySelector("[data-remind-handle]");
+    if (remind && handleField) {
+      remind.addEventListener("change", function () {
+        handleField.hidden = !remind.checked || !!booked;
+        document.body.classList.toggle("remind-open", !handleField.hidden);
+        if (!handleField.hidden) form.elements.handle.focus();
+      });
+    }
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       if (form.elements.website.value) return;  // hidden field only bots fill in
@@ -18,19 +31,13 @@
         last: card.cleanName(form.elements.last.value),
         comment: form.elements.comment.value.trim().slice(0, 300),
         ok_to_post: form.elements.ok_to_post.checked ? "yes" : "no",
+        remind: remind && remind.checked ? "yes" : "no",
+        handle: remind && remind.checked ? booked || form.elements.handle.value.trim() : "",  // the Sheet script cleans it
         ref: card.referredBy()
       };
       try { localStorage.setItem("myName", fields.first); } catch (e) { /* private mode */ }
 
-      if (card.config.endpoint) {
-        card.send("review", fields);
-      } else {
-        var stars = Number(fields.stars);
-        var text = "Review from " + fields.first + " " + fields.last + ": " +
-                   "★★★★★".slice(0, stars) + "☆☆☆☆☆".slice(0, 5 - stars) +
-                   (fields.comment ? " " + fields.comment : "");
-        location.href = "sms:" + card.config.phone + "?&body=" + encodeURIComponent(text);
-      }
+      card.send("review", fields).catch(function () {});
       card.count("review-sent");
       document.dispatchEvent(new CustomEvent("review-sent"));
 
@@ -46,6 +53,8 @@
         });
       } else {
         form.reset();
+        if (handleField) handleField.hidden = true;
+        document.body.classList.remove("remind-open");
         card.openSheet(document.getElementById("review-thanks"));
       }
     });
