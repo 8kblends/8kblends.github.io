@@ -20,7 +20,7 @@
   var timeRow = form.querySelector("[data-time-row]");
   var loading = form.querySelector("[data-loading]");
   var nextFromService = steps.service.querySelector("[data-next]");
-  var state = { ids: [], day: null, time: null, cfg: null, phone: false, first: null, firstFor: "", firstAsk: null };
+  var state = { ids: [], day: null, time: null, cfg: null, phone: false, first: null, credit: 0, firstFor: "", firstAsk: null };
 
   // ---------- steps ----------
   function go(name, push) {
@@ -169,8 +169,10 @@
     if (key !== state.firstFor) {
       state.firstFor = key;
       state.first = null;
+      state.credit = 0;
       state.firstAsk = card.ask(state.phone ? { a: "first", phone: phone } : { a: "first", handle: handle })
-        .then(function (r) { state.first = !!(r && r.ok && r.first); }, function () { state.first = false; });
+        .then(function (r) { state.first = !!(r && r.ok && r.first); state.credit = (r && r.ok && Number(r.credit)) || 0; },
+              function () { state.first = false; });
     }
     go("where", true);
   });
@@ -205,7 +207,8 @@
   function money(n) { return "$" + n; }
   function showOverview() {
     var cfg = state.cfg;
-    var q = rules.quote(state.ids, cfg.services, { travel: cfg.travel, firstOff: cfg.firstOff, first: !!state.first, paid: cfg.paid });
+    var q = rules.quote(state.ids, cfg.services, { travel: cfg.travel, firstOff: cfg.firstOff, first: !!state.first, paid: cfg.paid,
+                                                    credit: state.credit });
     var setup = form.querySelector('input[name="setup"]:checked');
     var spot = setup && !rules.unsure(setup.value) ? " · " + setup.value : "";
     var name = card.cleanName(form.elements.first.value);
@@ -219,9 +222,16 @@
     // Paid: the drive fee (Settings → Travel) is its own line. Not paid: just say Ty comes to them.
     if (cfg.services.length && cfg.travel) lines.push(cfg.paid ? line("Drive to you", "", money(cfg.travel)) : line("I come to you", "", ""));
     if (cfg.paid && q.special) {
-      lines.push('<li class="receipt-special"><span class="receipt-top"><b>First visit special</b><i aria-hidden="true"></i>' +
+      // A friend's link: the same first-visit special, credited to whoever sent them.
+      var ref = card.cleanName(form.elements.ref.value);
+      var label = ref && q.special.kind === "off" && cfg.referral > 0 ? "Sent by " + ref : "First visit special";
+      lines.push('<li class="receipt-special"><span class="receipt-top"><b>' + esc(label) + '</b><i aria-hidden="true"></i>' +
         "<em>−" + money(-q.special.amount) + "</em></span>" +
         (q.special.kind === "lineup" ? "<small>Your lineup's on me</small>" : "") + "</li>");
+    }
+    if (cfg.paid && q.credit) {
+      lines.push('<li class="receipt-special"><span class="receipt-top"><b>Thanks for sending a friend</b><i aria-hidden="true"></i>' +
+        "<em>−" + money(-q.credit.amount) + "</em></span></li>");
     }
     form.querySelector("[data-items]").innerHTML = lines.join("");
     form.querySelector("[data-total-line]").hidden = !cfg.paid;

@@ -56,7 +56,8 @@
     var where = [b.address, b.city].filter(Boolean).join(", ");
     $("[data-details]").innerHTML = [
       ["When", b.day + " · " + b.time],
-      ["What", b.services + (b.total !== "" ? " · $" + b.total : "") + (b.firstVisit ? " · first visit" : "")],
+      ["What", b.services + (b.total !== "" ? " · $" + b.total : "") + (b.firstVisit ? " · first visit" : "") +
+               (b.credit ? " · $" + b.credit + " off for sending a friend" : "")],
       ["Where", where ? '<a href="https://maps.google.com/?q=' + encodeURIComponent(where) + '">' + esc(where) + "</a>" +
         (rules.unsure(b.setup) ? ' · <span class="ty-ask">ask where to set up</span>' : " · " + esc(b.setup)) +
         (b.drive !== "" && b.drive !== undefined ? " · " + (Number(b.drive) > (b.maxDrive || 30) ? "⚠ " : "") + esc(b.drive) + " min away" : "") : ""],

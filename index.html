@@ -23,7 +23,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/oswald-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/mr-dafoe-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css?v=7c7e49ff20">
+<link rel="stylesheet" href="/assets/site.css?v=16d01dccd3">
 
 
 <title>Ty The Barber · 8kblends</title>
@@ -100,22 +100,23 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button>
   </form>
-  <h2 class="sheet-title" id="friend-title">Send my card to a friend</h2>
+  <h2 class="sheet-title" id="friend-title"><span data-refer="on"><span data-referral-amount></span> off for you both</span><span data-refer="off">Know someone who needs a cut?</span></h2>
+  <p class="sheet-perk" data-refer="on"><span aria-hidden="true">★</span> Your friend&#x27;s first cut, and your next one.</p>
   <form class="sheet-form" data-friend-form>
     <label class="field">
-      <span>Your first name, so I can thank you</span>
+      <span>Your name</span>
       <input name="name" autocomplete="given-name" maxlength="24" required>
     </label>
     <button class="btn btn-primary" type="submit">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
-      Share my link
+      Share my card
     </button>
   </form>
   <form method="dialog"><button class="sheet-later">Maybe later</button></form>
 </dialog>
 
-<script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "https://script.google.com/macros/s/AKfycbwviMHjZOcUVLB2PJBwBjjKKElLPbeXS-Q68Xgtw4oMO0ocJk8Ds4v7jdi9OsdoQ2rn/exec", "share_text": "Get a fresh cut from Ty The Barber 💈 Mention me when you book:", "banner": "{name} sent you! Mention {name} when you book."}</script>
-<script src="/assets/card.js?v=7c7e49ff20" defer></script>
-<script src="/assets/friend.js?v=7c7e49ff20" defer></script>
+<script type="application/json" id="site-config">{"site": "https://8kblends.github.io", "company": "Ty The Barber", "nickname": "Ty", "dm": "https://ig.me/m/8kblends", "endpoint": "https://script.google.com/macros/s/AKfycbwviMHjZOcUVLB2PJBwBjjKKElLPbeXS-Q68Xgtw4oMO0ocJk8Ds4v7jdi9OsdoQ2rn/exec", "share_text": "Fresh cuts at your place from Ty at 8kblends 💈 Book with my link:", "banner": "{name} sent you! Welcome.", "share_text_offer": "Fresh cuts at your place from Ty at 8kblends 💈 Book with my link and we both get {amount} off:", "banner_offer": "{name} sent you! {amount} off your first cut."}</script>
+<script src="/assets/card.js?v=16d01dccd3" defer></script>
+<script src="/assets/friend.js?v=16d01dccd3" defer></script>
 </body>
 </html>

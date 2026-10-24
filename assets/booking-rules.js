@@ -37,7 +37,8 @@ var BookingRules = (function () {
     return {};
   }
 
-  // services: [{id, name, price, includes}]; opts: {travel, firstOff, first, paid}
+  // services: [{id, name, price, includes}]; opts: {travel, firstOff, first, paid, credit}
+  // credit: $ off for having sent a friend; only in paid mode, and never on top of the first-visit special.
   function quote(ids, services, opts) {
     var byId = {};
     services.forEach(function (s) { byId[s.id] = s; });
@@ -59,9 +60,10 @@ var BookingRules = (function () {
         special = { kind: "lineup", label: "Free lineup", amount: -lineup.price };
       }
     }
+    var credit = opts.paid && opts.credit > 0 && !special && items.length ? { label: "Referral credit", amount: -opts.credit } : null;
     var subtotal = items.reduce(function (sum, it) { return sum + it.price; }, 0);
-    var total = items.length ? Math.max(0, subtotal + opts.travel + (special ? special.amount : 0)) : 0;
-    return { ids: picked, items: items, travel: opts.travel, special: special, total: total,
+    var total = items.length ? Math.max(0, subtotal + opts.travel + (special ? special.amount : 0) + (credit ? credit.amount : 0)) : 0;
+    return { ids: picked, items: items, travel: opts.travel, special: special, credit: credit, total: total,
              full: items.length ? subtotal + opts.travel : 0, paid: !!opts.paid };
   }
 

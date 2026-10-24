@@ -194,7 +194,7 @@ a { color: inherit; }
   border: 0; border-radius: 50%; background: var(--field); color: var(--ink); cursor: pointer;
 }
 .sheet-close svg { width: 18px; height: 18px; }
-.sheet-title { margin: 0 0 14px; font: 600 21px/1 var(--display); letter-spacing: .05em; text-transform: uppercase; }
+.sheet-title { margin: 0 0 14px; padding-right: 44px; font: 600 21px/1.15 var(--display); letter-spacing: .05em; text-transform: uppercase; }
 
 .toast {
   position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 10;
@@ -410,6 +410,8 @@ a { color: inherit; }
 
 /* Prices (and the QR's Pay tab) only show while the Settings tab's Paid mode is on. */
 html:not(.paid) [data-paid="on"], html.paid [data-paid="off"] { display: none !important; }
+/* The send-a-friend offer: shown while Paid mode is on and Settings → Referral credit isn't 0. */
+html:not(.refer) [data-refer="on"], html.refer [data-refer="off"] { display: none !important; }
 
 /* ---------- Booking (/book/): one step at a time ---------- */
 .step, .ty-view, .ok-view { display: grid; gap: clamp(7px, calc(1.2 * var(--vh)), 12px); }

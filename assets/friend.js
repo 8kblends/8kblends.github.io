@@ -18,7 +18,9 @@
     if (!name) { nameInput.focus(); return; }
     try { localStorage.setItem("myName", name); } catch (e) { /* private mode */ }
     var url = card.config.site + "/?ref=" + encodeURIComponent(name);
-    var text = card.config.share_text;
+    var offer = document.documentElement.classList.contains("refer");
+    var amount = (document.querySelector("[data-referral-amount]") || {}).textContent || "$10";
+    var text = (offer ? card.config.share_text_offer : card.config.share_text).split("{amount}").join(amount);
     var finish = function () {
       sheet.close();
       card.count("friend-sent");

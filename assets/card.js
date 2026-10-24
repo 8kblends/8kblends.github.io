@@ -127,8 +127,11 @@
   var config = configEl ? JSON.parse(configEl.textContent) : {};
 
   var banner = document.querySelector("[data-ref-banner]");
-  if (banner && referredBy && config.banner) {
-    banner.textContent = config.banner.split("{name}").join(referredBy);
+  function showBanner() {
+    var offer = document.documentElement.classList.contains("refer");
+    var text = offer ? config.banner_offer : config.banner;
+    if (!banner || !referredBy || !text) return;
+    banner.textContent = text.split("{name}").join(referredBy).split("{amount}").join(referAmount());
     banner.hidden = false;
   }
 
@@ -162,14 +165,36 @@
     if (on && pay && location.hash === "#pay" && document.body.getAttribute("data-mode") !== "pay") pay.click();
   }
   try { if (localStorage.getItem("paid") === "1") document.documentElement.classList.add("paid"); } catch (e) { /* private mode */ }
+
+  // The send-a-friend offer ("$10 off for you both"): on while Paid mode is on and
+  // Settings → Referral credit isn't 0. Remembered like Paid mode so nothing flickers.
+  function referAmount() {
+    var n = 10;
+    try { n = Number(localStorage.getItem("referAmount") || 10); } catch (e) { /* private mode */ }
+    return "$" + n;
+  }
+  function setRefer(amount) {
+    document.documentElement.classList.toggle("refer", amount > 0);
+    try { localStorage.setItem("refer", amount > 0 ? "1" : "0"); if (amount > 0) localStorage.setItem("referAmount", String(amount)); } catch (e) { /* private mode */ }
+    document.querySelectorAll("[data-referral-amount]").forEach(function (el) { el.textContent = referAmount(); });
+    showBanner();
+  }
+  try {
+    if (localStorage.getItem("refer") === "1" && localStorage.getItem("paid") === "1") document.documentElement.classList.add("refer");
+  } catch (e) { /* private mode */ }
+  document.querySelectorAll("[data-referral-amount]").forEach(function (el) { el.textContent = referAmount(); });
+  showBanner();
+
   function loadConfig(withTimes) {
     return ask(withTimes ? { a: "config", slots: "1" } : { a: "config" }).then(function (c) {
       if (!c || !(c.v >= 2)) throw new Error("the Sheet script needs the v2 update");
       setPaid(c.paid);
+      // An older Sheet script doesn't send "referral": keep the plain wording.
+      setRefer(c.paid && typeof c.referral === "number" ? c.referral : 0);
       return c;
     });
   }
-  if (document.querySelector("[data-paid]")) loadConfig(false).catch(function () { setPaid(false); });
+  if (document.querySelector("[data-paid], [data-refer]")) loadConfig(false).catch(function () { setPaid(false); setRefer(0); });
 
   window.card = {
     openSheet: openSheet, afterReturn: afterReturn, toast: toast,
